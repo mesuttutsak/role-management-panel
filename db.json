@@ -1,0 +1,42 @@
+{
+  "users": [
+    {
+      "id": "e0d8433a-5146-4aec-89af-f58701e34f6a",
+      "username": "admin",
+      "password": "xxx",
+      "firstname": "Admin",
+      "lastname": "User",
+      "systemUser": true,
+      "roleId": "0f3c2719-cecb-4a74-8a94-114eaa803418",
+      "permissionIds": [
+        "58d875f0-14f0-4c0b-b12a-a56c48a1cb11",
+        "8f8528bd-b05f-4616-a017-b87d92b704c1",
+        "e0e68146-3dfb-40dc-913c-dd6ef9daf38d"
+      ]
+    }
+  ],
+  "permissions": [
+    {
+      "id": "58d875f0-14f0-4c0b-b12a-a56c48a1cb11",
+      "name": "read"
+    },
+    {
+      "id": "8f8528bd-b05f-4616-a017-b87d92b704c1",
+      "name": "write"
+    },
+    {
+      "id": "e0e68146-3dfb-40dc-913c-dd6ef9daf38d",
+      "name": "delete"
+    }
+  ],
+  "roles": [
+    {
+      "id": "0f3c2719-cecb-4a74-8a94-114eaa803418",
+      "name": "doktor"
+    },
+    {
+      "id": "8f8528bd-b05f-4616-a017-b87d92b704c1",
+      "name": "hemşire"
+    }
+  ]
+}
