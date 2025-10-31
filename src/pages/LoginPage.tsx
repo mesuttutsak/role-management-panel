@@ -1,14 +1,14 @@
 import { FormEvent, useState } from "react";
 import {
-  // Description,
+  Description,
   Field,
   Fieldset,
   Label,
   Legend,
 } from "@headlessui/react";
-import { AuthLayout } from "../ui/layouts/AuthLayout/AuthLayout";
-import { Button } from "../ui/Button";
-import { Input } from "../ui/Input";
+import { AuthLayout } from "../core/ui/layouts/AuthLayout/AuthLayout";
+import { Button } from "../core/ui/Button";
+import { Input } from "../core/ui/Input";
 import { loginLiterals } from "./login.literals";
 import styles from "./LoginPage.module.css";
 
@@ -26,9 +26,9 @@ export function LoginPage() {
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
           <Fieldset className={styles.fieldset}>
             <Legend className={styles.title}>{loginLiterals.title}</Legend>
-            {/* <Description className={styles.subtitle}>
+            <Description className={styles.subtitle}>
               {loginLiterals.subtitle}
-            </Description> */}
+            </Description>
             <Field className={styles.field}>
               <Label className={styles.label}>
                 {loginLiterals.usernameLabel}
