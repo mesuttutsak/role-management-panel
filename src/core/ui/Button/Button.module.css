@@ -1,29 +1,11 @@
 .button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  border: none;
-  background-color: #4f46e5;
-  color: #ffffff;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  transition: background-color 0.2s ease, transform 0.2s ease,
-    box-shadow 0.2s ease;
+  @apply inline-flex items-center justify-center gap-2 cursor-pointer border-0 bg-primary-600 text-white rounded-lg px-4 py-2 text-sm font-semibold transition duration-200 ease-in-out transform shadow-none;
 }
 
 .button:hover:not(:disabled) {
-  background-color: #4338ca;
-  transform: translateY(-1px);
-  box-shadow: 0 10px 25px rgba(79, 70, 229, 0.25);
+  @apply bg-primary-700 -translate-y-px shadow-button;
 }
 
 .button:disabled {
-  cursor: not-allowed;
-  background-color: #c7d2fe;
-  box-shadow: none;
-  transform: none;
+  @apply cursor-not-allowed bg-primary-200 shadow-none translate-y-0;
 }

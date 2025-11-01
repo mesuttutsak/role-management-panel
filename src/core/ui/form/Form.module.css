@@ -1,0 +1,15 @@
+.title {
+  @apply m-0 text-2xl font-semibold text-slate-900;
+}
+
+.fieldset {
+  @apply flex flex-col gap-4 border-0 p-0 m-0;
+}
+
+.field {
+  @apply flex flex-col gap-2;
+}
+
+.label {
+  @apply text-sm font-medium text-slate-700;
+}

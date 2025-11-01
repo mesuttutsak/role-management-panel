@@ -1,21 +1,11 @@
 .input {
-  width: 100%;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  background-color: #ffffff;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  @apply w-full border border-gray-300 rounded-lg bg-white px-3 py-2 text-sm transition duration-200 ease-in-out;
 }
 
 .input:focus {
-  outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  @apply outline-none border-primary-600 ring-2 ring-primary-200;
 }
 
 .input:disabled {
-  background-color: #f3f4f6;
-  color: #9ca3af;
-  cursor: not-allowed;
+  @apply bg-gray-100 text-gray-400 cursor-not-allowed;
 }
