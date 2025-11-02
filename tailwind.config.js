@@ -31,7 +31,8 @@ module.exports = {
       },
       boxShadow: {
         surface: "0 2px 6px #090909ff",
-        button: "0 10px 25px rgba(79, 70, 229, 0.25)"
+        button: "0 10px 25px rgba(79, 70, 229, 0.25)",
+        buttonNegative: "0 10px 25px rgba(185, 28, 28, 0.25)"
       },
       borderRadius: {
         xl: "1rem"

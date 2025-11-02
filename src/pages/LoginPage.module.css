@@ -6,3 +6,11 @@
 .form {
   @apply flex flex-col gap-4;
 }
+
+.linkRow {
+  @apply flex items-center justify-between text-sm text-slate-500;
+}
+
+.link {
+  @apply font-medium text-primary-600 transition hover:text-primary-700;
+}

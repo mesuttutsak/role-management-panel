@@ -1,25 +1,25 @@
-import { forwardRef } from "react";
 import { Button as HeadlessButton } from "@headlessui/react";
 import { classNames } from "../../helpers/general";
 import styles from "./Button.module.css";
 
-const baseClassName = styles.button;
-
-const mergeClasses = (...values) =>
-  classNames(values.filter(Boolean));
-
-const resolveClassName = (className) => {
-  if (typeof className === "function") {
-    return (bag) => mergeClasses(baseClassName, className(bag));
-  }
-
-  return mergeClasses(baseClassName, className);
+const VARIANT_CLASSNAMES = {
+  positive: styles.buttonPositive,
+  negative: styles.buttonNegative,
 };
 
-export const Button = forwardRef(function Button({ className, ...props }, ref) {
-  const resolvedClassName = resolveClassName(className);
+export const Button = ({ className, variant = "positive", ...props }) => {
+  const resolvedClassName = Array.isArray(className)
+    ? className
+    : className
+    ? [className]
+    : [];
+
+  const variantClass = VARIANT_CLASSNAMES[variant] || VARIANT_CLASSNAMES.positive;
 
   return (
-    <HeadlessButton ref={ref} className={resolvedClassName} {...props} />
+    <HeadlessButton
+      className={classNames([styles.button, variantClass, ...resolvedClassName])}
+      {...props}
+    />
   );
-});
+};

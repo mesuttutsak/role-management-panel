@@ -1,0 +1,153 @@
+.sidebar {
+  @apply relative flex h-full min-h-screen flex-col gap-4 border-r border-slate-200 bg-white px-4 py-6 shadow-sm transition-all duration-200 ease-in-out;
+  width: 18rem;
+}
+
+.collapsed {
+  width: 6.6rem;
+  @apply px-4;
+}
+
+/* Helpers */
+.truncate {
+  @apply overflow-hidden text-ellipsis whitespace-nowrap;
+}
+
+.iconSvg {
+  @apply h-5 w-5;
+}
+
+.iconSmall {
+  @apply h-4 w-4;
+}
+
+/* Controls */
+.toggle {
+  @apply absolute -right-3 top-10 hidden h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow md:flex;
+}
+
+.toggleIconWrapper {
+  @apply flex h-4 w-4 items-center justify-center;
+}
+
+.mobileClose {
+  @apply absolute right-4 top-6 inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow md:hidden;
+}
+
+/* Profile */
+.profile {
+  @apply flex h-16 items-center rounded-xl bg-primary-50/70 px-3 text-slate-800 transition-all;
+}
+
+.avatar {
+  @apply flex h-12 w-12 min-h-12 min-w-12 items-center justify-center rounded-full bg-primary-600 text-sm font-semibold text-white;
+}
+
+.profileText {
+  @apply ml-2 flex flex-col text-left;
+}
+
+.profileName {
+  @apply text-sm font-semibold text-slate-900;
+}
+
+.profileRole {
+  @apply text-xs text-slate-500;
+}
+
+.divider {
+  @apply border-t border-slate-200;
+}
+
+/* Navigation */
+.menu {
+  @apply flex flex-1 flex-col gap-2 overflow-y-auto border-y border-slate-200 py-4;
+}
+
+.navButton {
+  @apply flex h-16 items-center rounded-lg px-3 text-left text-sm text-slate-600 transition-colors hover:bg-primary-50 hover:text-primary-700;
+}
+
+.navButtonActive {
+  @apply bg-primary-100 text-primary-700 font-semibold;
+}
+
+.iconBox {
+  @apply flex h-12 w-12 min-h-12 min-w-12 items-center justify-center rounded-lg bg-primary-50 text-base font-semibold text-primary-600;
+}
+
+.label {
+  @apply ml-2 flex-1 text-sm;
+}
+
+.chevronWrapper {
+  @apply flex h-4 w-4 items-center justify-center text-slate-400 transition-transform duration-200;
+}
+
+.chevronOpen {
+  @apply rotate-90;
+}
+
+.childList {
+  @apply mt-1 flex flex-col gap-1 pl-4;
+}
+
+.childButton {
+  @apply rounded-lg px-3 text-left text-sm text-slate-500 transition-colors hover:bg-primary-50 hover:text-primary-700;
+}
+
+.childButtonActive {
+  @apply bg-primary-100 text-primary-700 font-medium;
+}
+
+/* Logout */
+.logout {
+  @apply mt-auto;
+}
+
+.logoutContent {
+  @apply flex items-center gap-2;
+}
+
+.logoutIconWrapper {
+  @apply flex items-center justify-center;
+}
+
+.logoutIcon {
+  @apply h-5 w-5;
+}
+
+.mobileCloseIconWrapper {
+  @apply flex h-4 w-4 items-center justify-center;
+}
+
+/* Collapsed adjustments */
+.sidebar.collapsed .toggle {
+  @apply translate-y-0;
+}
+
+.sidebar.collapsed .profile {
+  @apply justify-start px-3;
+}
+
+.sidebar.collapsed .profileText,
+.sidebar.collapsed .label,
+.sidebar.collapsed .chevronWrapper,
+.sidebar.collapsed .childList,
+.sidebar.collapsed .profileRole,
+.sidebar.collapsed .logoutLabel {
+  display: none;
+}
+
+.profileText,
+.label,
+.logoutLabel,
+.logoutContent,
+.profileName,
+.profileRole {
+  @apply truncate;
+}
+
+.sidebar.collapsed .logout {
+  @apply w-full justify-start pl-7;
+}

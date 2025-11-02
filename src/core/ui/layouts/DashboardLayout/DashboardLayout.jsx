@@ -1,0 +1,130 @@
+import { Fragment, useMemo, useState } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { FiMenu } from "react-icons/fi";
+import { classNames } from "../../../helpers/general";
+import styles from "./DashboardLayout.module.css";
+import { Sidebar } from "./Sidebar";
+
+const mergeClasses = (...values) => classNames(values.filter(Boolean));
+
+const defaultUser = {
+  firstName: "Admin",
+  lastName: "User",
+  role: "Doktor",
+};
+
+export function DashboardLayout({
+  menuItems,
+  activeItemId,
+  onNavigate,
+  onLogout,
+  title = "Dashboard",
+  user = defaultUser,
+  children,
+  footer,
+  className,
+}) {
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  const items = useMemo(
+    () => (Array.isArray(menuItems) && menuItems.length ? menuItems : []),
+    [menuItems]
+  );
+
+  const handleNavigate = (item) => {
+    if (onNavigate) {
+      onNavigate(item);
+    }
+    setMobileSidebarOpen(false);
+  };
+
+  const handleLogout = () => {
+    if (onLogout) {
+      onLogout();
+    } else {
+      window.location.assign("/");
+    }
+    setMobileSidebarOpen(false);
+  };
+
+  return (
+    <>
+      <div className={mergeClasses(styles.root, className)}>
+        <aside className="hidden md:flex">
+          <Sidebar
+            items={items}
+            collapsed={isCollapsed}
+            activeItemId={activeItemId}
+            onNavigate={handleNavigate}
+            onToggleCollapse={() => setIsCollapsed((prev) => !prev)}
+            onLogout={handleLogout}
+            user={user}
+          />
+        </aside>
+
+        <div className={styles.main}>
+          <div className={styles.mobileHeader}>
+            <button
+              type="button"
+              className={styles.mobileButton}
+              onClick={() => setMobileSidebarOpen(true)}
+              aria-label="Menüyü aç"
+            >
+              <FiMenu className="h-5 w-5" />
+            </button>
+            <span className={styles.mobileTitle}>{title}</span>
+          </div>
+          <div className={styles.contentWrapper}>{children}</div>
+          {footer ? <footer className={styles.footer}>{footer}</footer> : null}
+        </div>
+      </div>
+
+      <Transition show={isMobileSidebarOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className={styles.mobileDialog}
+          onClose={() => setMobileSidebarOpen(false)}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="transition-opacity ease-linear duration-150"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-opacity ease-linear duration-150"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Dialog.Overlay className={styles.mobileOverlay} />
+          </Transition.Child>
+
+          <Transition.Child
+            as={Fragment}
+            enter="transition ease-in-out duration-200 transform"
+            enterFrom="-translate-x-full"
+            enterTo="translate-x-0"
+            leave="transition ease-in-out duration-200 transform"
+            leaveFrom="translate-x-0"
+            leaveTo="-translate-x-full"
+          >
+            <div className={styles.mobilePanelContainer}>
+              <Dialog.Panel className={styles.mobilePanel}>
+                <div className={styles.mobilePanelInner}>
+                  <Sidebar
+                    items={items}
+                    activeItemId={activeItemId}
+                    onNavigate={handleNavigate}
+                    onLogout={handleLogout}
+                    onClose={() => setMobileSidebarOpen(false)}
+                    user={user}
+                    isMobile
+                  />
+                </div>
+              </Dialog.Panel>
+            </div>
+          </Transition.Child>
+        </Dialog>
+      </Transition>
+    </>
+  );
+}

@@ -1,11 +1,27 @@
 .button {
-  @apply inline-flex items-center justify-center gap-2 cursor-pointer border-0 bg-primary-600 text-white rounded-lg px-4 py-2 text-sm font-semibold transition duration-200 ease-in-out transform shadow-none;
+  @apply inline-flex items-center justify-center gap-2 cursor-pointer border-0 rounded-lg px-4 py-2 text-sm font-semibold transition duration-200 ease-in-out transform shadow-none;
 }
 
-.button:hover:not(:disabled) {
+.buttonPositive {
+  @apply bg-primary-600 text-white;
+}
+
+.buttonPositive:hover:not(:disabled) {
   @apply bg-primary-700 -translate-y-px shadow-button;
 }
 
-.button:disabled {
+.buttonPositive:disabled {
   @apply cursor-not-allowed bg-primary-200 shadow-none translate-y-0;
+}
+
+.buttonNegative {
+  @apply bg-red-600 text-white;
+}
+
+.buttonNegative:hover:not(:disabled) {
+  @apply bg-red-700 -translate-y-px shadow-buttonNegative;
+}
+
+.buttonNegative:disabled {
+  @apply cursor-not-allowed bg-red-200 shadow-none translate-y-0;
 }

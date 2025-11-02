@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AuthLayout } from "../core/ui/layouts/AuthLayout/AuthLayout";
 import { Button } from "../core/ui/Button";
 import { Input } from "../core/ui/Input";
+import { Link } from "react-router-dom";
 import {
   FormField,
   FormFieldset,
@@ -53,6 +54,7 @@ export function LoginPage() {
               {loginLiterals.submitLabel}
             </Button>
           </form>
+            <Link to="/dashbord" className={styles.link}>Panel</Link>
         </Surface>
       </div>
     </AuthLayout>

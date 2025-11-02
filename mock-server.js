@@ -24,7 +24,6 @@ server.post("/users", (req, res, next) => {
     "firstname",
     "lastname",
     "roleId",
-    "permissionIds",
   ];
 
   for (const field of requiredFields) {
@@ -45,28 +44,6 @@ server.post("/users", (req, res, next) => {
     .value();
   if (!roleExists) {
     res.status(400).json({ error: "roleId must reference an existing role" });
-    return;
-  }
-
-  if (
-    !Array.isArray(req.body.permissionIds) ||
-    req.body.permissionIds.some(
-      (value) => typeof value !== "string" || !UUID_REGEX.test(value)
-    )
-  ) {
-    res
-      .status(400)
-      .json({ error: "permissionIds must be an array of UUID strings" });
-    return;
-  }
-
-  const invalidPermissions = req.body.permissionIds.filter((id) => {
-    return !router.db.get("permissions").some({ id }).value();
-  });
-  if (invalidPermissions.length) {
-    res.status(400).json({
-      error: "permissionIds must reference existing permissions",
-    });
     return;
   }
 
