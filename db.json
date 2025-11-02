@@ -2,28 +2,34 @@
   "permissionGroups": [
     {
       "id": "8b0ae46a-e3f3-4381-92a4-4eda6e64d988",
+      "key": "USERS",
       "name": "Users"
     },
     {
       "id": "a85d30ad-d4f5-4a01-9f07-b0d0ac29a831",
+      "key": "ROLES",
       "name": "Role & Permission"
     }
   ],
   "permissions": [
     {
       "id": "c6e031c2-53d1-4f64-8b5a-32e7c4c60101",
+      "key": "write",
       "name": "write"
     },
     {
       "id": "a4ff6d30-1f56-4a96-96f1-6f9b84c505e2",
+      "key": "read",
       "name": "read"
     },
     {
       "id": "4870b1d2-e7b9-4d20-8a29-5d8e7d4e10ac",
+      "key": "delete",
       "name": "delete"
     },
     {
       "id": "5b1b4f94-988d-4a7f-9eb7-b8478c3483d4",
+      "key": "navigate",
       "name": "navigate"
     }
   ],
