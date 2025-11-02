@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import APP_CONFIG from "../../config";
-import { sessionManager } from "../../utils/session";
+import { sessionManager } from "../../core/utils/session";
 
 const { API_BASE_URL, loggedSession } = APP_CONFIG;
 const session = sessionManager({
@@ -28,27 +28,12 @@ export const fetchAdminUser = createAsyncThunk(
     try {
       const response = await fetch(`${API_BASE_URL}/users?username=admin`);
       if (!response.ok) {
-        throw new Error("Admin bilgileri alınamadı");
+        throw new Error("Admin kullanıcısı bulunamadı");
       }
 
       const data = await response.json();
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new Error("Admin kullanıcısı bulunamadı");
-      }
-      const adminUser = data[0];
 
-      let roleName = "";
-      if (adminUser?.roleId) {
-        try {
-          const roleResponse = await fetch(`${API_BASE_URL}/roles/${adminUser.roleId}`);
-          if (roleResponse.ok) {
-            const roleData = await roleResponse.json();
-            roleName = roleData?.name || "";
-          }
-        } catch (error) {}
-      }
-
-      return { ...adminUser, roleName };
+      return data[0];
     } catch (error) {
       return rejectWithValue(error.message || "Admin bilgileri alınamadı");
     }

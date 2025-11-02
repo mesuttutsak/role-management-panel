@@ -1,4 +1,4 @@
-import { classNames } from "../../helpers/general";
+import { classNames } from "../../utils/general";
 import styles from "./Surface.module.css";
 
 const mergeClasses = (...values) =>

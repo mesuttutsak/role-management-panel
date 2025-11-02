@@ -1,6 +1,6 @@
 import { Fragment, useMemo, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { classNames } from "../../../helpers/general";
+import { classNames } from "../../../utils/general";
 import styles from "./DashboardLayout.module.css";
 import { Sidebar } from "./Sidebar";
 import { Icon } from "../../Icon";

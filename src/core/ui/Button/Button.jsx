@@ -1,5 +1,5 @@
 import { Button as HeadlessButton } from "@headlessui/react";
-import { classNames } from "../../helpers/general";
+import { classNames } from "../../utils/general";
 import styles from "./Button.module.css";
 
 const VARIANT_CLASSNAMES = {

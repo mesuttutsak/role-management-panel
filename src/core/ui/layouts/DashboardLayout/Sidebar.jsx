@@ -1,5 +1,5 @@
 import { Disclosure } from "@headlessui/react";
-import { classNames } from "../../../helpers/general";
+import { classNames } from "../../../utils/general";
 import styles from "./Sidebar.module.css";
 import { Button } from "../../Button";
 import { Icon } from "../../Icon";
@@ -20,9 +20,6 @@ export function Sidebar({
 }) {
 
   const { user } = useAppSelector((state) => state.auth);
-
-  console.log('user', user);
-  
 
   const { firstname, lastname, roleName } = user;
   const avatarLetters = firstname?.charAt(0) + lastname?.charAt(0);

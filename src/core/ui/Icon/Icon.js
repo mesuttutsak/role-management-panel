@@ -1,5 +1,5 @@
 import { isValidElement } from "react";
-import { classNames } from "../../helpers/general";
+import { classNames } from "../../utils/general";
 import * as FiIcons from "react-icons/fi";
 
 const ICON_LIBRARIES = {

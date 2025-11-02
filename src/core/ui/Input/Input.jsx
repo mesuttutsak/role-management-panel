@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { Input as HeadlessInput } from "@headlessui/react";
-import { classNames } from "../../helpers/general";
+import { classNames } from "../../utils/general";
 import styles from "./Input.module.css";
 
 const baseClasses = [styles.input, "px-3", "py-2", "text-sm"];

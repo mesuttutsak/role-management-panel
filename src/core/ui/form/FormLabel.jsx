@@ -1,5 +1,5 @@
 import { Label as HeadlessLabel } from "@headlessui/react";
-import { classNames } from "../../helpers/general";
+import { classNames } from "../../utils/general";
 import styles from "./Form.module.css";
 
 export function FormLabel({ className = [], ...props }) {
