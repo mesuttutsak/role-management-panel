@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthLayout } from "../core/ui/layouts/AuthLayout/AuthLayout";
 import { Button } from "../core/ui/Button";
 import { Input } from "../core/ui/Input";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   FormField,
   FormFieldset,
@@ -13,19 +13,80 @@ import { loginLiterals } from "./login.literals";
 import styles from "./LoginPage.module.css";
 import { Info } from "../core/ui/Info";
 import { Surface } from "../core/ui/Surface";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import {
+  clearLoginError,
+  fetchAdminUser,
+  login,
+} from "../features/auth/authSlice";
 
 export function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const {
+    loginStatus,
+    loginError,
+    user,
+    adminHint,
+    hintStatus,
+  } = useAppSelector((state) => state.auth);
+  
+  useEffect(() => {
+    if (hintStatus === "idle") {
+      dispatch(fetchAdminUser());
+    }
+  }, [dispatch, hintStatus]);
+
+  useEffect(() => {
+    if (loginStatus === "succeeded" && user) {
+      navigate("/dashbord", { replace: true });
+    }
+  }, [loginStatus, user, navigate]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (!username || !password || loginStatus === "loading") {
+      return;
+    }
+
+    dispatch(clearLoginError());
+    dispatch(login({ username, password }));
+  };
+
+  const renderInfo = () => {
+    if (hintStatus === "loading") {
+      return <Info text="Admin bilgileri yükleniyor..." align="center" />;
+    }
+
+    if (hintStatus === "failed") {
+      return (
+        <Info
+          status="danger"
+          text="Admin bilgileri alınamadı. json-server çalışıyor mu?"
+          align="center"
+        />
+      );
+    }
+
+    if (adminHint) {
+      return (
+        <Info
+          text={`username: "${adminHint.username}", password: "${adminHint.password}"`}
+          align="center"
+        />
+      );
+    }
+
+    return null;
   };
 
   return (
     <AuthLayout>
       <div className={styles.container}>
-        <Info text={'username: "admin", password: "1234"'} align="center"/>
+        {renderInfo()}
         <Surface>
           <form className={styles.form} onSubmit={handleSubmit} noValidate>
             <FormFieldset>
@@ -50,11 +111,16 @@ export function LoginPage() {
                 />
               </FormField>
             </FormFieldset>
-            <Button type="submit" disabled={!username || !password}>
+            {loginError ? (
+              <Info status="danger" text={loginError} align="left" />
+            ) : null}
+            <Button
+              type="submit"
+              disabled={!username || !password || loginStatus === "loading"}
+            >
               {loginLiterals.submitLabel}
             </Button>
           </form>
-            <Link to="/dashbord" className={styles.link}>Panel</Link>
         </Surface>
       </div>
     </AuthLayout>

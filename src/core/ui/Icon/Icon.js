@@ -7,7 +7,8 @@ const ICON_LIBRARIES = {
 };
 
 export function Icon({ icon, label, wrapperClassName, className, library = "fi" }) {
-  let content = label?.charAt(0)?.toUpperCase() ?? "•";
+  const labelText = typeof label === "string" ? label : "";
+  let content = labelText.charAt(0).toUpperCase() || "•";
   let iconName = null;
   let iconLibrary = library;
 

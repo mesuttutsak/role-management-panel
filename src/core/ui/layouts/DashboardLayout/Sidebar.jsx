@@ -3,6 +3,7 @@ import { classNames } from "../../../helpers/general";
 import styles from "./Sidebar.module.css";
 import { Button } from "../../Button";
 import { Icon } from "../../Icon";
+import { useAppSelector } from "../../../../app/hooks";
 
 const mergeClasses = (...values) => classNames(values.filter(Boolean));
 
@@ -14,17 +15,17 @@ export function Sidebar({
   onToggleCollapse,
   onLogout,
   onClose,
-  user,
   isMobile = false,
   className,
 }) {
-  const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(" ").trim() || "Kullanıcı";
-  const initials = fullName
-    .split(" ")
-    .map((part) => part.charAt(0))
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+
+  const { user } = useAppSelector((state) => state.auth);
+
+  console.log('user', user);
+  
+
+  const { firstname, lastname, roleName } = user;
+  const avatarLetters = firstname?.charAt(0) + lastname?.charAt(0);
 
   const handleSelect = (item) => {
     if (onNavigate) {
@@ -156,15 +157,18 @@ export function Sidebar({
       ) : null}
 
       <div
-        className={mergeClasses(
-          styles.profile,
-          collapsed && !isMobile && styles.profileCollapsed
-        )}
+        className={styles.profile}
       >
-        <span className={styles.avatar}>{initials || "U"}</span>
+        <span className={styles.avatar}>{avatarLetters || 'U'}</span>
         <div className={styles.profileText}>
-          <span className={styles.profileName}>{fullName}</span>
-          {user?.role ? <span className={styles.profileRole}>{user?.role}</span> : null}
+          {
+            user && (
+              <>
+                <span className={styles.profileName}>{firstname} {lastname}</span>
+                <span className={styles.profileRole}>{roleName}</span>
+              </>
+            )
+          }
         </div>
       </div>
 

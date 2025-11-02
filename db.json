@@ -2,15 +2,11 @@
   "permissionGroups": [
     {
       "id": "8b0ae46a-e3f3-4381-92a4-4eda6e64d988",
-      "name": "User Management"
+      "name": "Users"
     },
     {
       "id": "a85d30ad-d4f5-4a01-9f07-b0d0ac29a831",
       "name": "Role & Permission"
-    },
-    {
-      "id": "46b72fa6-2f42-4b03-9ff1-b646711a6106",
-      "name": "Patient Management"
     }
   ],
   "permissions": [
@@ -35,18 +31,12 @@
         "8b0ae46a-e3f3-4381-92a4-4eda6e64d988": [
           "c6e031c2-53d1-4f64-8b5a-32e7c4c60101",
           "a4ff6d30-1f56-4a96-96f1-6f9b84c505e2",
-          "4870b1d2-e7b9-4d20-8a29-5d8e7d4e10ac",
-          "283b9f88-4163-4a74-8acc-1d7786b4edbd"
+          "4870b1d2-e7b9-4d20-8a29-5d8e7d4e10ac"
         ],
         "a85d30ad-d4f5-4a01-9f07-b0d0ac29a831": [
-          "5c85c6ad-fb19-4b5f-af7f-0df5b85f1e9c",
-          "c7f0b370-2aa4-4b0d-bb89-fde2ce2446aa",
-          "167079b3-1978-423e-a9d6-47014cfaefb1"
-        ],
-        "46b72fa6-2f42-4b03-9ff1-b646711a6106": [
-          "948d52f4-8f00-4aa9-9320-d70d84f38281",
-          "759fd3c2-9382-4e76-a665-e4d50bb90228",
-          "c6b7b77c-f7bf-4c2a-9a17-820a3210d464"
+          "c6e031c2-53d1-4f64-8b5a-32e7c4c60101",
+          "a4ff6d30-1f56-4a96-96f1-6f9b84c505e2",
+          "4870b1d2-e7b9-4d20-8a29-5d8e7d4e10ac"
         ]
       }
     },
@@ -76,8 +66,8 @@
       "id": "b819b8a7-10ca-4d1a-a6d0-06da80ef7073",
       "username": "admin",
       "password": "1234",
-      "firstName": "Admin",
-      "lastName": "User",
+      "firstname": "Admin",
+      "lastname": "User",
       "roleId": "d1026600-9356-4e16-8ee4-1b924f9dede9",
       "systemUser": true
     },
@@ -85,8 +75,8 @@
       "id": "14b37f0e-8403-4b61-8bd9-3b2a9acfb390",
       "username": "doktor",
       "password": "1234",
-      "firstName": "Mehmet",
-      "lastName": "Yılmaz",
+      "firstname": "Mehmet",
+      "lastname": "Yılmaz",
       "roleId": "4fb620f0-3e55-4b8a-9e6b-2265920357b6",
       "systemUser": false
     }

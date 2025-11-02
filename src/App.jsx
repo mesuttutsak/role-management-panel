@@ -4,13 +4,23 @@ import { DashboardShell } from "./pages/DashboardShell";
 import { DashboardOverview } from "./pages/DashboardOverview";
 import { DashboardUsers } from "./pages/DashboardUsers";
 import { DashboardRoles } from "./pages/DashboardRoles";
+import { RequireAuth } from "./routes/RequireAuth";
+import { SessionRedirect } from "./routes/SessionRedirect";
 
 export function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/dashbord" element={<DashboardShell />}>
+        <Route path="/" element={<SessionRedirect />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/dashbord"
+          element={
+            <RequireAuth>
+              <DashboardShell />
+            </RequireAuth>
+          }
+        >
           <Route index element={<DashboardOverview />} />
           <Route path="users" element={<DashboardUsers />} />
           <Route path="roles" element={<DashboardRoles />} />

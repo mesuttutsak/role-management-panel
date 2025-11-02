@@ -1,17 +1,11 @@
 import { Fragment, useMemo, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { FiMenu } from "react-icons/fi";
 import { classNames } from "../../../helpers/general";
 import styles from "./DashboardLayout.module.css";
 import { Sidebar } from "./Sidebar";
+import { Icon } from "../../Icon";
 
 const mergeClasses = (...values) => classNames(values.filter(Boolean));
-
-const defaultUser = {
-  firstName: "Admin",
-  lastName: "User",
-  role: "Doktor",
-};
 
 export function DashboardLayout({
   menuItems,
@@ -19,7 +13,7 @@ export function DashboardLayout({
   onNavigate,
   onLogout,
   title = "Dashboard",
-  user = defaultUser,
+  user,
   children,
   footer,
   className,
@@ -71,7 +65,12 @@ export function DashboardLayout({
               onClick={() => setMobileSidebarOpen(true)}
               aria-label="Menüyü aç"
             >
-              <FiMenu className="h-5 w-5" />
+              <Icon
+                icon="FiMenu"
+                wrapperClassName="flex h-5 w-5 items-center justify-center"
+                className="h-5 w-5"
+                label="Menüyü aç"
+              />
             </button>
             <span className={styles.mobileTitle}>{title}</span>
           </div>

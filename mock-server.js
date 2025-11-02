@@ -69,6 +69,31 @@ server.post("/users", (req, res, next) => {
   next();
 });
 
+server.post("/auth/login", (req, res) => {
+  const { username, password } = req.body || {};
+
+  if (!username || !password) {
+    res.status(400).json({ error: "username and password are required" });
+    return;
+  }
+
+  const user = router.db.get("users").find({ username }).value();
+
+  if (!user || user.password !== password) {
+    res.status(401).json({ error: "Invalid credentials" });
+    return;
+  }
+
+  const role = router.db.get("roles").find({ id: user.roleId }).value();
+
+  const { password: _password, ...userWithoutPassword } = user;
+
+  res.json({
+    ...userWithoutPassword,
+    roleName: role?.name || "",
+  });
+});
+
 server.delete("/users/:id", (req, res, next) => {
   const record = router.db.get("users").find({ id: req.params.id }).value();
   if (record && record.systemUser) {
