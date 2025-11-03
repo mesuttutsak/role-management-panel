@@ -1,14 +1,12 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useMemo } from "react";
+import { Suspense } from "react";
+import { useEffect } from "react";
 import { DashboardLayout } from "../core/ui/layouts/DashboardLayout";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { logout, setActivePage } from "../features/auth/authSlice";
 
-const menuItems = [
-  { id: "overview", label: "Overview", icon: "FiHome", href: "/dashbord" },
-  { id: "users", label: "Users", icon: "FiUsers", href: "/dashbord/users" },
-  { id: "roles", label: "Roles", icon: "FiShield", href: "/dashbord/roles" },
-];
+import { useDashboardNavigation } from "../core/hooks/useDashboardNavigation";
+import { Spinner } from "../core/ui/Spinner";
 
 function getActiveItemId(pathname) {
   if (pathname === "/dashbord" || pathname === "/dashbord/") {
@@ -28,11 +26,9 @@ export function DashboardShell() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user, activePage } = useAppSelector((state) => state.auth);
+  const { menuItems } = useDashboardNavigation();
 
-  const currentPage = useMemo(
-    () => getActiveItemId(location.pathname),
-    [location.pathname]
-  );
+  const currentPage = getActiveItemId(location.pathname);
 
   useEffect(() => {
     if (!user) {
@@ -46,28 +42,21 @@ export function DashboardShell() {
     }
   }, [dispatch, currentPage, activePage]);
 
-  const handleNavigate = (item) => {
-    if (item?.href) {
-      dispatch(setActivePage(item.id));
-      navigate(item.href);
-    }
-  };
-
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/", { replace: true });
-  }
-
   return (
     <DashboardLayout
       title="Dashboard"
       menuItems={menuItems}
       activeItemId={activePage}
-      onNavigate={handleNavigate}
-      onLogout={handleLogout}
+      onNavigate={(item) => navigate(item.href)}
+      onLogout={() => {
+        dispatch(logout());
+        navigate("/", { replace: true });
+      }}
       user={user}
     >
-      <Outlet />
+      <Suspense fallback={<Spinner fullPage message="İçerik yükleniyor..." />}>
+        <Outlet />
+      </Suspense>
     </DashboardLayout>
   );
 }
