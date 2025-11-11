@@ -13,3 +13,7 @@
 .label {
   @apply text-sm font-medium text-slate-700;
 }
+
+.error {
+  @apply text-xs text-red-600;
+}

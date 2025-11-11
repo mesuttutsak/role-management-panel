@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "../../../../../core/ui/Button";
 import { Input } from "../../../../../core/ui/Input";
 import { Modal } from "../../../../../core/ui/Modal";
+import { FormField, FormLabel } from "../../../../../core/ui/form";
 import styles from "./UserForm.module.css";
 
 export function EditUserForm({ open, user, onClose, roles = [], onSubmit }) {
@@ -92,46 +93,43 @@ export function EditUserForm({ open, user, onClose, roles = [], onSubmit }) {
       bodyClassName={styles.modalBody}
     >
       <form className={styles.form} onSubmit={handleSubmit}>
-        <div className={styles.field}>
-          <label htmlFor="edit-firstname" className={styles.label}>
+        <FormField className={[styles.field]} error={errors.firstname}>
+          <FormLabel htmlFor="edit-firstname" className={[styles.label]}>
             First name
-          </label>
+          </FormLabel>
           <Input
             id="edit-firstname"
             value={formState.firstname}
             onChange={(event) => updateField("firstname", event.target.value)}
             disabled={submitting}
           />
-          {errors.firstname ? <p className={styles.errorText}>{errors.firstname}</p> : null}
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="edit-lastname" className={styles.label}>
+        </FormField>
+        <FormField className={[styles.field]} error={errors.lastname}>
+          <FormLabel htmlFor="edit-lastname" className={[styles.label]}>
             Last name
-          </label>
+          </FormLabel>
           <Input
             id="edit-lastname"
             value={formState.lastname}
             onChange={(event) => updateField("lastname", event.target.value)}
             disabled={submitting}
           />
-          {errors.lastname ? <p className={styles.errorText}>{errors.lastname}</p> : null}
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="edit-username" className={styles.label}>
+        </FormField>
+        <FormField className={[styles.field]} error={errors.username}>
+          <FormLabel htmlFor="edit-username" className={[styles.label]}>
             Username
-          </label>
+          </FormLabel>
           <Input
             id="edit-username"
             value={formState.username}
             onChange={(event) => updateField("username", event.target.value)}
             disabled={submitting}
           />
-          {errors.username ? <p className={styles.errorText}>{errors.username}</p> : null}
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="edit-role" className={styles.label}>
+        </FormField>
+        <FormField className={[styles.field]} error={errors.roleId}>
+          <FormLabel htmlFor="edit-role" className={[styles.label]}>
             Role
-          </label>
+          </FormLabel>
           <select
             id="edit-role"
             className={styles.select}
@@ -146,8 +144,7 @@ export function EditUserForm({ open, user, onClose, roles = [], onSubmit }) {
               </option>
             ))}
           </select>
-          {errors.roleId ? <p className={styles.errorText}>{errors.roleId}</p> : null}
-        </div>
+        </FormField>
         {formError ? <p className={styles.formError}>{formError}</p> : null}
         <div className={styles.actions}>
           <Button

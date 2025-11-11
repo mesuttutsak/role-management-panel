@@ -6,3 +6,15 @@
 .form {
   @apply flex flex-col gap-4;
 }
+
+.hintButton {
+  @apply flex flex-col gap-1 rounded-xl border border-transparent bg-transparent p-0 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300;
+}
+
+.hintButton :global(.info) {
+  @apply cursor-pointer;
+}
+
+.hintHelper {
+  @apply text-xs text-slate-500 text-center;
+}

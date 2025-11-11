@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "../../../../../core/ui/Button";
 import { Input } from "../../../../../core/ui/Input";
 import { Modal } from "../../../../../core/ui/Modal";
+import { FormField, FormLabel } from "../../../../../core/ui/form";
 import styles from "./UserForm.module.css";
 
 const INITIAL_FORM = {
@@ -94,38 +95,32 @@ export function AddUserForm({ open, onClose, roles = [], onSubmit }) {
       bodyClassName={styles.modalBody}
     >
       <form className={styles.form} onSubmit={handleSubmit}>
-        <div className={styles.field}>
-          <label htmlFor="firstname" className={styles.label}>
+        <FormField className={[styles.field]} error={errors.firstname}>
+          <FormLabel htmlFor="firstname" className={[styles.label]}>
             First name
-          </label>
+          </FormLabel>
           <Input
             id="firstname"
             value={formState.firstname}
             onChange={(event) => updateField("firstname", event.target.value)}
             disabled={submitting}
           />
-          {errors.firstname ? (
-            <p className={styles.errorText}>{errors.firstname}</p>
-          ) : null}
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="lastname" className={styles.label}>
+        </FormField>
+        <FormField className={[styles.field]} error={errors.lastname}>
+          <FormLabel htmlFor="lastname" className={[styles.label]}>
             Last name
-          </label>
+          </FormLabel>
           <Input
             id="lastname"
             value={formState.lastname}
             onChange={(event) => updateField("lastname", event.target.value)}
             disabled={submitting}
           />
-          {errors.lastname ? (
-            <p className={styles.errorText}>{errors.lastname}</p>
-          ) : null}
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="username" className={styles.label}>
+        </FormField>
+        <FormField className={[styles.field]} error={errors.username}>
+          <FormLabel htmlFor="username" className={[styles.label]}>
             Username
-          </label>
+          </FormLabel>
           <Input
             id="username"
             value={formState.username}
@@ -133,14 +128,11 @@ export function AddUserForm({ open, onClose, roles = [], onSubmit }) {
             disabled={submitting}
             autoComplete="off"
           />
-          {errors.username ? (
-            <p className={styles.errorText}>{errors.username}</p>
-          ) : null}
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="password" className={styles.label}>
+        </FormField>
+        <FormField className={[styles.field]} error={errors.password}>
+          <FormLabel htmlFor="password" className={[styles.label]}>
             Password <i>**şifre standart "1234" olarak belirlenmiştir.</i>
-          </label>
+          </FormLabel>
           <Input
             id="password"
             type="password"
@@ -148,14 +140,11 @@ export function AddUserForm({ open, onClose, roles = [], onSubmit }) {
             onChange={(event) => updateField("password", event.target.value)}
             disabled
           />
-          {errors.password ? (
-            <p className={styles.errorText}>{errors.password}</p>
-          ) : null}
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="role" className={styles.label}>
+        </FormField>
+        <FormField className={[styles.field]} error={errors.roleId}>
+          <FormLabel htmlFor="role" className={[styles.label]}>
             Role
-          </label>
+          </FormLabel>
           <select
             id="role"
             className={styles.select}
@@ -170,10 +159,7 @@ export function AddUserForm({ open, onClose, roles = [], onSubmit }) {
               </option>
             ))}
           </select>
-          {errors.roleId ? (
-            <p className={styles.errorText}>{errors.roleId}</p>
-          ) : null}
-        </div>
+        </FormField>
         {formError ? <p className={styles.formError}>{formError}</p> : null}
         <div className={styles.actions}>
           <Button

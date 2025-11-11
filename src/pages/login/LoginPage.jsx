@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AuthLayout } from "../../core/ui/layouts/AuthLayout/AuthLayout";
 import { Button } from "../../core/ui/Button";
 import { Input } from "../../core/ui/Input";
 import { useNavigate } from "react-router-dom";
 import {
+  FormError,
   FormField,
   FormFieldset,
   FormLabel,
@@ -20,9 +21,14 @@ import {
   login,
 } from "../../features/auth/authSlice";
 
+const INITIAL_FORM = {
+  username: "",
+  password: "",
+};
+
 export function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [formState, setFormState] = useState(INITIAL_FORM);
+  const [errors, setErrors] = useState({});
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -33,6 +39,17 @@ export function LoginPage() {
     adminHint,
     hintStatus,
   } = useAppSelector((state) => state.auth);
+
+  const handleApplyHint = useCallback(() => {
+    if (!adminHint) {
+      return;
+    }
+    setFormState({
+      username: adminHint.username || "",
+      password: adminHint.password || "",
+    });
+    setErrors({});
+  }, [adminHint]);
   
   useEffect(() => {
     if (hintStatus === "idle") {
@@ -46,14 +63,40 @@ export function LoginPage() {
     }
   }, [loginStatus, user, navigate]);
 
+  const updateField = (field, value) => {
+    setFormState((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const validate = () => {
+    const nextErrors = {};
+    if (!formState.username.trim()) {
+      nextErrors.username = "Kullanıcı adı zorunludur.";
+    }
+    if (!formState.password.trim()) {
+      nextErrors.password = "Şifre zorunludur.";
+    }
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!username || !password || loginStatus === "loading") {
+    if (loginStatus === "loading") {
       return;
     }
-
+    if (!validate()) {
+      return;
+    }
     dispatch(clearLoginError());
-    dispatch(login({ username, password }));
+    dispatch(
+      login({
+        username: formState.username.trim(),
+        password: formState.password,
+      })
+    );
   };
 
   const renderInfo = () => {
@@ -73,10 +116,17 @@ export function LoginPage() {
 
     if (adminHint) {
       return (
-        <Info
-          text={`username: "${adminHint.username}", password: "${adminHint.password}"`}
-          align="center"
-        />
+        <button
+          type="button"
+          className={styles.hintButton}
+          onClick={handleApplyHint}
+          aria-label="Fill admin credentials"
+        >
+          <Info
+            text={`username: "${adminHint.username}", password: "${adminHint.password}"`}
+            align="center"
+          />
+        </button>
       );
     }
 
@@ -91,32 +141,31 @@ export function LoginPage() {
           <form className={styles.form} onSubmit={handleSubmit} noValidate>
             <FormFieldset>
               <FormLegend>{loginLiterals.title}</FormLegend>
-              <FormField>
+              <FormField error={errors.username}>
                 <FormLabel>{loginLiterals.usernameLabel}</FormLabel>
                 <Input
-                  value={username}
-                  onChange={(event) => setUsername(event.target.value)}
+                  value={formState.username}
+                  onChange={(event) => updateField("username", event.target.value)}
                   autoComplete="username"
                   required
                 />
               </FormField>
-              <FormField>
+              <FormField error={errors.password}>
                 <FormLabel>{loginLiterals.passwordLabel}</FormLabel>
                 <Input
                   type="password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
+                  value={formState.password}
+                  onChange={(event) => updateField("password", event.target.value)}
                   autoComplete="current-password"
                   required
                 />
               </FormField>
             </FormFieldset>
             {loginError ? (
-              <Info status="danger" text={loginError} align="left" />
+              <FormError>{loginError}</FormError>
             ) : null}
             <Button
               type="submit"
-              disabled={!username || !password || loginStatus === "loading"}
             >
               {loginLiterals.submitLabel}
             </Button>
