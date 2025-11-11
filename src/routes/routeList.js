@@ -14,16 +14,6 @@ const DashboardOverview = lazy(() =>
 const DashboardUsers = lazy(() =>
   import("../pages/DashboardUsers").then((m) => ({ default: m.DashboardUsers }))
 );
-const DashboardDoctors = lazy(() =>
-  import("../pages/DashboardDoctors").then((m) => ({
-    default: m.DashboardDoctors,
-  }))
-);
-const DashboardPatients = lazy(() =>
-  import("../pages/DashboardPatients").then((m) => ({
-    default: m.DashboardPatients,
-  }))
-);
 const DashboardRoles = lazy(() =>
   import("../pages/DashboardRoles").then((m) => ({ default: m.DashboardRoles }))
 );
