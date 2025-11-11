@@ -58,14 +58,14 @@ export function LoginPage() {
 
   const renderInfo = () => {
     if (hintStatus === "loading") {
-      return <Info text="Admin bilgileri yükleniyor..." align="center" />;
+      return <Info text="Admin credentials are loading..." align="center" />;
     }
 
     if (hintStatus === "failed") {
       return (
         <Info
           status="danger"
-          text="Admin bilgileri alınamadı. json-server çalışıyor mu?"
+          text="Admin credentials could not be loaded. Is json-server running?"
           align="center"
         />
       );

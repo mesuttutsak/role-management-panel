@@ -5,8 +5,9 @@ const mergeClasses = (...values) =>
   classNames(values.filter(Boolean));
 
 export function Surface({ className, children, ...props }) {
+  const { fullWidth } = props;
   return (
-    <div className={mergeClasses(styles.surface, className)} {...props}>
+    <div className={mergeClasses(styles.surface, fullWidth ? styles.fullWidth : "", className)}>
       {children}
     </div>
   );

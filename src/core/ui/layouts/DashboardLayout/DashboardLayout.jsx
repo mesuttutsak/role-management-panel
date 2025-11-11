@@ -63,13 +63,13 @@ export function DashboardLayout({
               type="button"
               className={styles.mobileButton}
               onClick={() => setMobileSidebarOpen(true)}
-              aria-label="Menüyü aç"
+              aria-label="Open menu"
             >
               <Icon
                 icon="FiMenu"
                 wrapperClassName="flex h-5 w-5 items-center justify-center"
                 className="h-5 w-5"
-                label="Menüyü aç"
+                label="Open menu"
               />
             </button>
             <span className={styles.mobileTitle}>{title}</span>

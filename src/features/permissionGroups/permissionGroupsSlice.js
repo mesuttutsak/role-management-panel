@@ -25,12 +25,12 @@ export const fetchPermissionGroups = createAsyncThunk(
     try {
       const response = await fetch(`${API_BASE_URL}/permissionGroups`);
       if (!response.ok) {
-        throw new Error("Permission groups alınamadı");
+        throw new Error("Permission groups could not be fetched");
       }
       const data = await response.json();
       return Array.isArray(data) ? data : [];
     } catch (error) {
-      return rejectWithValue(error.message || "Permission groups alınamadı");
+      return rejectWithValue(error.message || "Permission groups could not be fetched");
     }
   }
 );

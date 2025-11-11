@@ -25,12 +25,12 @@ export const fetchPermissions = createAsyncThunk(
     try {
       const response = await fetch(`${API_BASE_URL}/permissions`);
       if (!response.ok) {
-        throw new Error("Permissions alınamadı");
+        throw new Error("Permissions could not be fetched");
       }
       const data = await response.json();
       return Array.isArray(data) ? data : [];
     } catch (error) {
-      return rejectWithValue(error.message || "Permissions alınamadı");
+      return rejectWithValue(error.message || "Permissions could not be fetched");
     }
   }
 );

@@ -54,18 +54,24 @@
     },
     {
       "id": "4fb620f0-3e55-4b8a-9e6b-2265920357b6",
-      "name": "Doktor",
+      "name": "Doctor",
       "permissions": {
         "8b0ae46a-e3f3-4381-92a4-4eda6e64d988": [
+          "5b1b4f94-988d-4a7f-9eb7-b8478c3483d4",
           "a4ff6d30-1f56-4a96-96f1-6f9b84c505e2",
-          "5b1b4f94-988d-4a7f-9eb7-b8478c3483d4"
+          "c6e031c2-53d1-4f64-8b5a-32e7c4c60101"
         ]
       }
     },
     {
       "id": "c5dd6a1a-db56-4fac-90dd-f562a1fb58fc",
-      "name": "Hasta",
-      "permissions": {}
+      "name": "Patient",
+      "permissions": {
+        "8b0ae46a-e3f3-4381-92a4-4eda6e64d988": [
+          "5b1b4f94-988d-4a7f-9eb7-b8478c3483d4",
+          "a4ff6d30-1f56-4a96-96f1-6f9b84c505e2"
+        ]
+      }
     }
   ],
   "users": [
@@ -79,20 +85,20 @@
       "systemUser": true
     },
     {
-      "id": "14b37f0e-8403-4b61-8bd9-3b2a9acfb390",
-      "username": "doktor",
+      "id": "5e8c3e6e-7b63-4f4a-9877-6dc9f8811b6f",
+      "username": "doctor",
       "password": "1234",
-      "firstname": "Mehmet",
-      "lastname": "Yılmaz",
+      "firstname": "Alex",
+      "lastname": "Doe",
       "roleId": "4fb620f0-3e55-4b8a-9e6b-2265920357b6",
       "systemUser": false
     },
     {
-      "id": "14b37f0e-8403-4b61-8bd9-3b2a9acfb390",
-      "username": "hasta",
+      "id": "0c6a8cd2-7a52-4f53-a5d6-3c3a7a58e8dd",
+      "username": "patient",
       "password": "1234",
-      "firstname": "Hasta",
-      "lastname": "Dummy",
+      "firstname": "Jamie",
+      "lastname": "Lee",
       "roleId": "c5dd6a1a-db56-4fac-90dd-f562a1fb58fc",
       "systemUser": false
     }

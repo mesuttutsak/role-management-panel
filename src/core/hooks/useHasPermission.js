@@ -6,7 +6,21 @@ const normalizeRequirement = (requirement) => {
     return null;
   }
 
-  const group = requirement?.group?.toUpperCase()
+  if (typeof requirement === "string") {
+    const value = String(requirement);
+    if (!value) {
+      return null;
+    }
+    return {
+      group: undefined,
+      permissions: [value],
+    };
+  }
+
+  const group =
+    typeof requirement?.group === "string"
+      ? requirement.group.toUpperCase()
+      : undefined;
 
   let rawPermissions = [];
   if (Array.isArray(requirement.permissions)) {
@@ -17,9 +31,17 @@ const normalizeRequirement = (requirement) => {
     rawPermissions = [requirement.permission];
   }
 
+  const permissions = rawPermissions
+    .map((permission) =>
+      permission === undefined || permission === null
+        ? ""
+        : String(permission)
+    )
+    .filter(Boolean);
+
   return {
     group,
-    rawPermissions,
+    permissions,
   };
 };
 

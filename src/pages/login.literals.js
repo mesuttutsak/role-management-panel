@@ -1,7 +1,7 @@
 export const loginLiterals = {
-  title: "Role Yönetimi Paneli",
-  subtitle: "Devam etmek için oturum açın",
-  usernameLabel: "Kullanıcı adı",
-  passwordLabel: "Parola",
-  submitLabel: "Giriş yap",
+  title: "Role Management Panel",
+  subtitle: "Sign in to continue",
+  usernameLabel: "Username",
+  passwordLabel: "Password",
+  submitLabel: "Sign In",
 };

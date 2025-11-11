@@ -1,0 +1,61 @@
+.tableSurface {
+  @apply w-full flex-1;
+}
+
+.filterRow {
+  @apply bg-slate-50;
+}
+
+.filterRow th {
+  @apply px-4 py-2;
+}
+
+.filterSelect {
+  @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 transition focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-200 disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.paginationSurface {
+  @apply flex w-full flex-col items-start gap-4 border-t border-slate-200 bg-white px-6 py-4 text-sm text-slate-600 md:flex-row md:items-center md:justify-between;
+}
+
+.paginationButtonGroup {
+  @apply flex w-full flex-col gap-3 md:w-auto md:flex-row md:items-center;
+}
+
+.pageSizeSelect {
+  @apply rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-100;
+}
+
+.paginationButton {
+  @apply rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition duration-200 hover:border-indigo-200 hover:text-indigo-600 disabled:cursor-not-allowed disabled:opacity-40;
+}
+
+.pageInputWrap {
+  @apply flex items-center justify-between gap-2 rounded-full border border-slate-200 px-3 py-1;
+}
+
+.pageInput {
+  @apply w-16 border-0 bg-transparent text-center text-sm text-slate-900 outline-none;
+}
+
+.pageInput::-webkit-inner-spin-button,
+.pageInput::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.paginationTotal {
+  @apply text-sm font-semibold text-slate-900;
+}
+
+.totalSpinner {
+  @apply inline-block h-4 w-4 animate-spin rounded-full border-2 border-slate-200 border-t-indigo-500;
+}
+
+.actionCell {
+  @apply w-12 text-center;
+}
+
+.emptyStateCell {
+  @apply px-4 py-8 text-center text-base text-slate-500;
+}

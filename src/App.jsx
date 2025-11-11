@@ -7,7 +7,7 @@ import { RequireAuth } from "./routes/RequireAuth";
 export function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<Spinner fullPage message="Yükleniyor..." />}>
+      <Suspense fallback={<Spinner fullPage message="Loading..." />}>
         <Routes>
         {ROUTES.map(({ key, path, element, children, requiresAuth, requiredPermissions }) => {
           let routeElement = element;

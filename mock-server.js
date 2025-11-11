@@ -9,6 +9,36 @@ const middlewares = jsonServer.defaults();
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
 
+const LIKE_PARAM_SUFFIX = "_like";
+
+const applyCaseInsensitiveLikeFilters = (query) => {
+  if (!query) {
+    return;
+  }
+
+  Object.entries(query).forEach(([key, rawValue]) => {
+    if (!key.endsWith(LIKE_PARAM_SUFFIX)) {
+      return;
+    }
+
+    const wrapValue = (value) =>
+      typeof value === "string" ? new RegExp(value, "i") : value;
+
+    if (Array.isArray(rawValue)) {
+      query[key] = rawValue.map(wrapValue);
+    } else {
+      query[key] = wrapValue(rawValue);
+    }
+  });
+};
+
+server.use((req, _res, next) => {
+  if (req.method === "GET") {
+    applyCaseInsensitiveLikeFilters(req.query);
+  }
+  next();
+});
+
 server.post("/auth/login", (req, res) => {
   const { username, password } = req.body || {};
 
@@ -290,29 +320,61 @@ const resolvePermissionsForRole = (role, db) => {
 
   const normalizedGroups = rolePermissionEntries.map(
     ([rawGroupId, permissionIds]) => {
-      const groupId = rawGroupId;
-      const baseGroup = groupsById[groupId]
+      const groupId = String(rawGroupId || "");
+      const baseGroup =
+        groupsById[groupId] || createFallbackGroup(groupId || "UNKNOWN");
 
+      const normalizedPermissions = (Array.isArray(permissionIds)
+        ? permissionIds
+        : []
+      )
         .map((rawPermissionId) => {
-          const permissionId = rawPermissionId;
+          const permissionId = String(rawPermissionId || "");
           if (!permissionId) {
             return null;
           }
           return (
-            permissionsById[permissionId]
+            permissionsById[permissionId] ||
+            createFallbackPermission(permissionId)
           );
         })
         .filter(Boolean);
 
       return {
         ...baseGroup,
-        permissions: permissionIds,
+        permissions: dedupeById(normalizedPermissions),
       };
     }
   );
 
+  const uniquePermissions = dedupeById(
+    normalizedGroups.flatMap((group) => group.permissions || [])
+  );
+
   return {
     permissionGroups: normalizedGroups,
-    permissions: normalizedGroups.flatMap((group) => group.permissions || []),
+    permissions: uniquePermissions,
   };
 };
+
+const dedupeById = (records) => {
+  const byId = new Map();
+  records.forEach((record) => {
+    if (record?.id && !byId.has(record.id)) {
+      byId.set(record.id, record);
+    }
+  });
+  return Array.from(byId.values());
+};
+
+const createFallbackGroup = (groupId) => ({
+  id: groupId,
+  key: groupId,
+  name: groupId,
+});
+
+const createFallbackPermission = (permissionId) => ({
+  id: permissionId,
+  key: permissionId,
+  name: permissionId,
+});

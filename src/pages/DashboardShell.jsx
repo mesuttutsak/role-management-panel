@@ -54,7 +54,7 @@ export function DashboardShell() {
       }}
       user={user}
     >
-      <Suspense fallback={<Spinner fullPage message="İçerik yükleniyor..." />}>
+      <Suspense fallback={<Spinner fullPage message="Content is loading..." />}>
         <Outlet />
       </Suspense>
     </DashboardLayout>

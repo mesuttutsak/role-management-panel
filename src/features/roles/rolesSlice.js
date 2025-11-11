@@ -15,12 +15,43 @@ export const fetchRoles = createAsyncThunk(
     try {
       const response = await fetch(`${API_BASE_URL}/roles`);
       if (!response.ok) {
-        throw new Error("Roles alınamadı");
+        throw new Error("Roles could not be fetched");
       }
       const data = await response.json();
       return Array.isArray(data) ? data : [];
     } catch (error) {
-      return rejectWithValue(error.message || "Roles alınamadı");
+      return rejectWithValue(error.message || "Roles could not be fetched");
+    }
+  }
+);
+
+export const fetchRolesByIds = createAsyncThunk(
+  "roles/fetchByIds",
+  async (roleIds = [], { rejectWithValue }) => {
+    const uniqueIds = Array.from(
+      new Set(
+        (Array.isArray(roleIds) ? roleIds : [roleIds]).filter(
+          (id) => typeof id === "string" && id.trim() !== ""
+        )
+      )
+    );
+
+    if (uniqueIds.length === 0) {
+      return [];
+    }
+
+    const params = new URLSearchParams();
+    uniqueIds.forEach((id) => params.append("id", id));
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/roles?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error("Roles could not be loaded");
+      }
+      const data = await response.json();
+      return Array.isArray(data) ? data : [];
+    } catch (error) {
+      return rejectWithValue(error.message || "Roles could not be loaded");
     }
   }
 );
@@ -46,6 +77,16 @@ const rolesSlice = createSlice({
       .addCase(fetchRoles.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || action.error.message || null;
+      })
+      .addCase(fetchRolesByIds.fulfilled, (state, action) => {
+        if (!Array.isArray(action.payload)) {
+          return;
+        }
+        action.payload.forEach((role) => {
+          if (role?.id) {
+            state.byId[role.id] = role;
+          }
+        });
       });
   },
 });

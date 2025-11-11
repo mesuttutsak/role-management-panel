@@ -1,4 +1,4 @@
-export function Spinner({ fullPage = false, message = "Yükleniyor..." }) {
+export function Spinner({ fullPage = false, message = "Loading..." }) {
   return (
     <div
       style={{

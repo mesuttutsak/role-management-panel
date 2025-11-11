@@ -79,7 +79,7 @@ export function Sidebar({
                   icon="FiChevronDown"
                   wrapperClassName={mergeClasses(styles.chevronWrapper, open && styles.chevronOpen)}
                   className={styles.iconSmall}
-                  label="Alt menü"
+                  label="Submenu"
                 />
               </Disclosure.Button>
               <Disclosure.Panel className={styles.childList}>
@@ -126,13 +126,13 @@ export function Sidebar({
           type="button"
           className={styles.toggle}
           onClick={onToggleCollapse}
-          aria-label={collapsed ? "Menüyü genişlet" : "Menüyü daralt"}
+          aria-label={collapsed ? "Expand menu" : "Collapse menu"}
         >
           <Icon
             icon={collapsed ? "FiChevronRight" : "FiChevronLeft"}
             wrapperClassName={styles.toggleIconWrapper}
             className={styles.iconSmall}
-            label="Menü genişliği"
+            label="Menu width"
           />
         </button>
       )}
@@ -142,13 +142,13 @@ export function Sidebar({
           type="button"
           className={styles.mobileClose}
           onClick={onClose}
-          aria-label="Menüyü kapat"
+          aria-label="Close menu"
         >
           <Icon
             icon="FiX"
             wrapperClassName={styles.mobileCloseIconWrapper}
             className={styles.iconSmall}
-            label="Menüyü kapat"
+            label="Close menu"
           />
         </button>
       ) : null}

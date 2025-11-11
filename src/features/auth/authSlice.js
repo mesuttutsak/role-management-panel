@@ -28,14 +28,14 @@ export const fetchAdminUser = createAsyncThunk(
     try {
       const response = await fetch(`${API_BASE_URL}/users?username=admin`);
       if (!response.ok) {
-        throw new Error("Admin kullanıcısı bulunamadı");
+        throw new Error("Admin user could not be found");
       }
 
       const data = await response.json();
 
       return data[0];
     } catch (error) {
-      return rejectWithValue(error.message || "Admin bilgileri alınamadı");
+      return rejectWithValue(error.message || "Admin details could not be loaded");
     }
   }
 );
@@ -54,7 +54,7 @@ export const login = createAsyncThunk(
 
       if (!response.ok) {
         const errorBody = await response.json().catch(() => ({}));
-        const message = errorBody?.error || "Giriş yapılamadı";
+        const message = errorBody?.error || "Login failed";
         return rejectWithValue(message);
       }
 
@@ -62,7 +62,7 @@ export const login = createAsyncThunk(
 
       return userRecord;
     } catch (error) {
-      return rejectWithValue(error.message || "Giriş yapılamadı");
+      return rejectWithValue(error.message || "Login failed");
     }
   }
 );
