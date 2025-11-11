@@ -1,5 +1,10 @@
 .tableSurface {
-  @apply w-full flex-1;
+  @apply w-full overflow-auto h-full;
+  --table-head-shadow: none;
+}
+
+.tableSurfaceShadow {
+  --table-head-shadow: 0 2px 4px rgba(15, 23, 42, 0.12);
 }
 
 .filterRow {

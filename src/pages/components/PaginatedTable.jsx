@@ -1,8 +1,10 @@
+import { useEffect, useRef, useState } from "react";
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { TableSurface, Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell } from "../../core/ui/Table";
 import { Spinner } from "../../core/ui/Spinner";
 import { Surface } from "../../core/ui/Surface";
 import { StringFilterInput } from "./StringFilterInput";
+import { classNames } from "../../core/utils/general";
 import styles from "./PaginatedTable.module.css";
 
 const DEFAULT_CLASSNAMES = {
@@ -90,11 +92,28 @@ export function PaginatedTable({
   onNext,
   onPageSizeChange,
   onDirectPageChange,
-  classNames = {},
+  className = {},
 }) {
-  const resolvedClassNames = { ...DEFAULT_CLASSNAMES, ...classNames };
+  const resolvedClassNames = { ...DEFAULT_CLASSNAMES, ...className };
+  const tableSurfaceRef = useRef(null);
+  const [headElevated, setHeadElevated] = useState(false);
   const fallbackLoadingMessage = loadingMessage ?? "Records are loading...";
   const fallbackEmptyMessage = emptyMessage ?? "No records found";
+
+  useEffect(() => {
+    const node = tableSurfaceRef.current;
+    if (!node) {
+      return;
+    }
+
+    const handleScroll = () => {
+      setHeadElevated(node.scrollTop > 0);
+    };
+
+    handleScroll();
+    node.addEventListener("scroll", handleScroll);
+    return () => node.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const table = useReactTable({
     data: data || [],
@@ -141,7 +160,13 @@ export function PaginatedTable({
 
   return (
     <>
-      <TableSurface className={resolvedClassNames.tableSurface}>
+      <TableSurface
+        ref={tableSurfaceRef}
+        className={classNames([
+          resolvedClassNames.tableSurface,
+          headElevated ? styles.tableSurfaceShadow : null,
+        ])}
+      >
         <Table>
           <TableHead>
             {headerGroups.map((headerGroup) => (

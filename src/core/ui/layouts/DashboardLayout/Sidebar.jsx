@@ -182,9 +182,9 @@ export function Sidebar({
             icon="FiLogOut"
             wrapperClassName={styles.logoutIconWrapper}
             className={styles.logoutIcon}
-            label="Oturumu kapat"
+            label="Logout"
           />
-          <span className={styles.logoutLabel}>Oturumu kapat</span>
+          <span className={styles.logoutLabel}>Logout</span>
         </span>
       </Button>
     </div>

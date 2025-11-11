@@ -105,6 +105,25 @@ server.post("/users", (req, res, next) => {
     return;
   }
 
+  const normalizedUsername =
+    typeof req.body.username === "string"
+      ? req.body.username.trim().toLowerCase()
+      : "";
+  if (!normalizedUsername) {
+    res.status(400).json({ error: "username is required" });
+    return;
+  }
+
+  const usernameExists = router.db
+    .get("users")
+    .some((user) => (user.username || "").trim().toLowerCase() === normalizedUsername)
+    .value();
+
+  if (usernameExists) {
+    res.status(409).json({ error: "Username already exists" });
+    return;
+  }
+
   const allowedFields = [
     "username",
     "password",
@@ -115,7 +134,11 @@ server.post("/users", (req, res, next) => {
   ];
 
   const sanitizedBody = allowedFields.reduce((acc, key) => {
-    acc[key] = req.body[key];
+    if (typeof req.body[key] === "string") {
+      acc[key] = req.body[key].trim();
+    } else {
+      acc[key] = req.body[key];
+    }
     return acc;
   }, {});
 

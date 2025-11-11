@@ -1,0 +1,47 @@
+.dialogRoot {
+  @apply fixed inset-0 z-50 overflow-y-auto;
+}
+
+.backdrop {
+  @apply fixed inset-0 bg-slate-900/40;
+}
+
+.wrapper {
+  @apply flex min-h-full items-center justify-center p-4;
+}
+
+.panel {
+  @apply w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all;
+}
+
+.title {
+  @apply text-lg font-semibold text-slate-900;
+}
+
+.form {
+  @apply mt-4 flex flex-col gap-4;
+}
+
+.field {
+  @apply flex flex-col gap-1;
+}
+
+.label {
+  @apply text-sm font-medium text-slate-700;
+}
+
+.select {
+  @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-primary-200 focus:ring-2 focus:ring-primary-100 disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.actions {
+  @apply mt-6 flex justify-end gap-3;
+}
+
+.errorText {
+  @apply text-xs text-red-600;
+}
+
+.formError {
+  @apply text-sm text-red-600;
+}

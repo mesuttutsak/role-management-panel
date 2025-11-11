@@ -45,7 +45,7 @@ const ROUTES = [
       },
       {
         key: "dashboard-users",
-        path: "users",
+        path: "users/*",
         element: <DashboardUsers />,
         requiredPermissions: { group: "USERS", permissions: "navigate" },
         navigation: { id: "users", label: "Users", icon: "FiUser" },

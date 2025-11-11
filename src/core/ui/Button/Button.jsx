@@ -5,6 +5,7 @@ import styles from "./Button.module.css";
 const VARIANT_CLASSNAMES = {
   positive: styles.buttonPositive,
   negative: styles.buttonNegative,
+  secondary: styles.buttonSecondary,
 };
 
 export const Button = ({ className, variant = "positive", ...props }) => {

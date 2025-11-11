@@ -1,0 +1,15 @@
+.container {
+  @apply flex flex-1 items-center justify-center p-6;
+}
+
+.card {
+  @apply w-full max-w-xl rounded-2xl bg-white p-6 shadow;
+}
+
+.linkWrapper {
+  @apply mt-4 text-center;
+}
+
+.link {
+  @apply text-primary-600 font-semibold hover:text-primary-700;
+}

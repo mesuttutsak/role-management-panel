@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import { Surface } from "../core/ui/Surface";
 import { Icon } from "../core/ui/Icon";
 import { PaginatedTable } from "./components/PaginatedTable";
@@ -6,12 +6,13 @@ import { useDashboardUsersTable } from "./hooks/useDashboardUsersTable";
 import { useHasPermission } from "../core/hooks/useHasPermission";
 import { DashboardUnauthorized } from "./DashboardUnauthorized";
 import { Spinner } from "../core/ui/Spinner";
-import { useAppSelector } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { createUser, fetchUsers, fetchUsersTotalCount } from "../features/users/usersSlice";
+import { useMatch, useNavigate } from "react-router-dom";
 import styles from "./DashboardUsers.module.css";
 
 import { Button } from "../core/ui/Button";
-
-const PAGE_SIZE_OPTIONS = [5, 10];
+import { AddUserDialog } from "./components/AddUserDialog";
 
 const buildRoleFilterOptions = (roles = []) => [
   { value: "", label: "All" },
@@ -107,12 +108,23 @@ const tableColumns = (onDelete, deletingId, roles = [], currentUserId, canDelete
 
 export function DashboardUsers() {
   const hasPermission = useHasPermission();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const createMatch = useMatch("/dashbord/users/create");
+  const isCreateRoute = Boolean(createMatch);
   const user = useAppSelector((state) => state.auth.user);
   const loginStatus = useAppSelector((state) => state.auth.loginStatus);
   const permissionsReady = Boolean(user && Array.isArray(user.permissionGroups));
   const isAccessLoading = loginStatus === "loading" && !permissionsReady;
   const canReadUsers = permissionsReady && hasPermission({ group: "USERS", permissions: "read" });
   const canDeleteUsers = permissionsReady && hasPermission({ group: "USERS", permissions: "delete" });
+  const canCreateUsers = permissionsReady && hasPermission({ group: "USERS", permissions: "write" });
+  const navigateToCreate = useCallback(() => {
+    if (!canCreateUsers) {
+      return;
+    }
+    navigate("/dashbord/users/create");
+  }, [canCreateUsers, navigate]);
 
   const {
     decoratedData,
@@ -139,14 +151,32 @@ export function DashboardUsers() {
     [handleDelete, deletingId, roles, currentUserId, canDeleteUsers]
   );
 
+  const handleCreateUser = useCallback(
+    async (payload) => {
+      const normalizedUsername = (payload?.username || "").trim().toLowerCase();
+      const duplicateExists = decoratedData.some(
+        (user) => (user.username || "").trim().toLowerCase() === normalizedUsername
+      );
+
+      if (duplicateExists) {
+        throw new Error("This username is already in use.");
+      }
+
+      await dispatch(createUser(payload)).unwrap();
+      await Promise.all([
+        dispatch(fetchUsers({ page, pageSize, filters })),
+        dispatch(fetchUsersTotalCount({ filters })),
+      ]);
+    },
+    [dispatch, page, pageSize, filters, decoratedData]
+  );
+
+  const handleCloseCreate = useCallback(() => {
+    navigate("/dashbord/users", { replace: true });
+  }, [navigate]);
+
   if (isAccessLoading) {
     return <Spinner fullPage message="Checking permissions..." />;
-  }
-
-  if (!canReadUsers) {
-    return (
-      <DashboardUnauthorized message="You do not have permission to view users." />
-    );
   }
 
   return (
@@ -156,25 +186,43 @@ export function DashboardUsers() {
           <strong>USERS</strong>
         </span>
         <span>
-          <Button>Add New User</Button>
+          <Button
+            type="button"
+            onClick={navigateToCreate}
+            disabled={!canCreateUsers}
+            title={!canCreateUsers ? "You do not have permission to add users" : undefined}
+          >
+            Add New User
+          </Button>
         </span>
       </Surface>
 
-      <PaginatedTable
-        columns={columns}
-        data={decoratedData}
-        filters={filters}
-        onFilterChange={handleFilterChange}
-        status={status}
-        page={page}
-        pageSize={pageSize}
-        totalCount={totalCount}
-        totalLoading={totalLoading}
-        hasMore={hasMore}
-        onPrev={handlePrev}
-        onNext={handleNext}
-        onPageSizeChange={handlePageSizeChange}
-        onDirectPageChange={handleDirectPageChange}
+      {canReadUsers ? (
+        <PaginatedTable
+          columns={columns}
+          data={decoratedData}
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          status={status}
+          page={page}
+          pageSize={pageSize}
+          totalCount={totalCount}
+          totalLoading={totalLoading}
+          hasMore={hasMore}
+          onPrev={handlePrev}
+          onNext={handleNext}
+          onPageSizeChange={handlePageSizeChange}
+          onDirectPageChange={handleDirectPageChange}
+        />
+      ) : (
+        <DashboardUnauthorized message="You do not have permission to view users." />
+      )}
+
+      <AddUserDialog
+        open={isCreateRoute && canCreateUsers}
+        onClose={handleCloseCreate}
+        roles={roles}
+        onSubmit={handleCreateUser}
       />
     </div>
   );

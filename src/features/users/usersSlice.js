@@ -13,6 +13,8 @@ const initialState = {
   hasMore: false,
   totalStatus: "idle",
   totalError: null,
+  createStatus: "idle",
+  createError: null,
   filters: {
     username: "",
     firstname: "",
@@ -163,6 +165,31 @@ export const fetchUsersTotalCount = createAsyncThunk(
   }
 );
 
+export const createUser = createAsyncThunk(
+  "users/create",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => null);
+        const message = errorBody?.error || "User could not be created";
+        return rejectWithValue(message);
+      }
+
+      return await response.json();
+    } catch (error) {
+      return rejectWithValue(error.message || "User could not be created");
+    }
+  }
+);
+
 const usersSlice = createSlice({
   name: "users",
   initialState,
@@ -221,6 +248,17 @@ const usersSlice = createSlice({
       .addCase(fetchUsersTotalCount.rejected, (state, action) => {
         state.totalStatus = "failed";
         state.totalError = action.payload || action.error.message || null;
+      })
+      .addCase(createUser.pending, (state) => {
+        state.createStatus = "loading";
+        state.createError = null;
+      })
+      .addCase(createUser.fulfilled, (state) => {
+        state.createStatus = "succeeded";
+      })
+      .addCase(createUser.rejected, (state, action) => {
+        state.createStatus = "failed";
+        state.createError = action.payload || action.error.message || null;
       });
   },
 });

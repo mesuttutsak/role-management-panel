@@ -1,13 +1,16 @@
+import { forwardRef } from "react";
 import { classNames } from "../../utils/general";
 import styles from "./Table.module.css";
 
 const mergeClasses = (...values) => values.filter(Boolean).join(" ");
 
-export const TableSurface = ({ children, className }) => (
-  <div className={classNames([styles.surface, className])}>
-    {children}
-  </div>
-);
+export const TableSurface = forwardRef(function TableSurface({ children, className }, ref) {
+  return (
+    <div ref={ref} className={classNames([styles.surface, className])}>
+      {children}
+    </div>
+  );
+});
 
 export const Table = ({ children }) => (
   <table className={styles.table}>{children}</table>

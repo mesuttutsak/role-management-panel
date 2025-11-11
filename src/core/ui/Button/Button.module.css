@@ -25,3 +25,15 @@
 .buttonNegative:disabled {
   @apply cursor-not-allowed bg-red-200 shadow-none translate-y-0;
 }
+
+.buttonSecondary {
+  @apply border border-slate-300 bg-white text-slate-700;
+}
+
+.buttonSecondary:hover:not(:disabled) {
+  @apply border-slate-400 bg-slate-50 text-slate-900;
+}
+
+.buttonSecondary:disabled {
+  @apply cursor-not-allowed border-slate-200 bg-white text-slate-400;
+}
