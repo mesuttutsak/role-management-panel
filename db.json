@@ -57,20 +57,15 @@
       "name": "Doktor",
       "permissions": {
         "8b0ae46a-e3f3-4381-92a4-4eda6e64d988": [
-          "948d52f4-8f00-4aa9-9320-d70d84f38281",
-          "c6b7b77c-f7bf-4c2a-9a17-820a3210d464"
+          "a4ff6d30-1f56-4a96-96f1-6f9b84c505e2",
+          "5b1b4f94-988d-4a7f-9eb7-b8478c3483d4"
         ]
       }
     },
     {
       "id": "c5dd6a1a-db56-4fac-90dd-f562a1fb58fc",
-      "name": "Hemşire",
-      "permissions": {
-        "8b0ae46a-e3f3-4381-92a4-4eda6e64d988": [
-          "948d52f4-8f00-4aa9-9320-d70d84f38281",
-          "c6b7b77c-f7bf-4c2a-9a17-820a3210d464"
-        ]
-      }
+      "name": "Hasta",
+      "permissions": {}
     }
   ],
   "users": [
@@ -90,6 +85,15 @@
       "firstname": "Mehmet",
       "lastname": "Yılmaz",
       "roleId": "4fb620f0-3e55-4b8a-9e6b-2265920357b6",
+      "systemUser": false
+    },
+    {
+      "id": "14b37f0e-8403-4b61-8bd9-3b2a9acfb390",
+      "username": "hasta",
+      "password": "1234",
+      "firstname": "Hasta",
+      "lastname": "Dummy",
+      "roleId": "c5dd6a1a-db56-4fac-90dd-f562a1fb58fc",
       "systemUser": false
     }
   ]

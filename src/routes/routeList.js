@@ -3,10 +3,30 @@ import { Navigate } from "react-router-dom";
 import { SessionRedirect } from "./SessionRedirect";
 
 const LoginPage = lazy(() => import("../pages/LoginPage").then((m) => ({ default: m.LoginPage })));
-const DashboardShell = lazy(() => import("../pages/DashboardShell").then((m) => ({ default: m.DashboardShell })));
-const DashboardOverview = lazy(() => import("../pages/DashboardOverview").then((m) => ({ default: m.DashboardOverview })));
-const DashboardUsers = lazy(() => import("../pages/DashboardUsers").then((m) => ({ default: m.DashboardUsers })));
-const DashboardRoles = lazy(() => import("../pages/DashboardRoles").then((m) => ({ default: m.DashboardRoles })));
+const DashboardShell = lazy(() =>
+  import("../pages/DashboardShell").then((m) => ({ default: m.DashboardShell }))
+);
+const DashboardOverview = lazy(() =>
+  import("../pages/DashboardOverview").then((m) => ({
+    default: m.DashboardOverview,
+  }))
+);
+const DashboardUsers = lazy(() =>
+  import("../pages/DashboardUsers").then((m) => ({ default: m.DashboardUsers }))
+);
+const DashboardDoctors = lazy(() =>
+  import("../pages/DashboardDoctors").then((m) => ({
+    default: m.DashboardDoctors,
+  }))
+);
+const DashboardPatients = lazy(() =>
+  import("../pages/DashboardPatients").then((m) => ({
+    default: m.DashboardPatients,
+  }))
+);
+const DashboardRoles = lazy(() =>
+  import("../pages/DashboardRoles").then((m) => ({ default: m.DashboardRoles }))
+);
 
 const ROUTES = [
   {
@@ -38,7 +58,7 @@ const ROUTES = [
         path: "users",
         element: <DashboardUsers />,
         requiredPermissions: { group: "USERS", permissions: "navigate" },
-        navigation: { id: "users", label: "Users", icon: "FiUsers" },
+        navigation: { id: "users", label: "Users", icon: "FiUser" },
         isMenuItem: true,
       },
       {

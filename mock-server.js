@@ -27,10 +27,16 @@ server.post("/auth/login", (req, res) => {
   const role = router.db.get("roles").find({ id: user.roleId }).value();
 
   const { password: _password, ...userWithoutPassword } = user;
+  const { permissionGroups, permissions } = resolvePermissionsForRole(
+    role,
+    router.db
+  );
 
   res.json({
     ...userWithoutPassword,
     roleName: role?.name || "",
+    permissionGroups,
+    permissions,
   });
 });
 
@@ -256,4 +262,57 @@ const searchParamsToQueryObject = (searchParams) => {
   }
   
   return query;
+};
+
+const resolvePermissionsForRole = (role, db) => {
+  if (!role) {
+    return { permissionGroups: [], permissions: [] };
+  }
+
+  const permissionGroups = db.get("permissionGroups").value() || [];
+  const permissions = db.get("permissions").value() || [];
+
+  const permissionsById = permissions.reduce((acc, permission) => {
+    if (permission?.id) {
+      acc[permission.id] = { ...permission };
+    }
+    return acc;
+  }, {});
+
+  const groupsById = permissionGroups.reduce((acc, group) => {
+    if (group?.id) {
+      acc[group.id] = { ...group };
+    }
+    return acc;
+  }, {});
+
+  const rolePermissionEntries = Object.entries(role.permissions || {});
+
+  const normalizedGroups = rolePermissionEntries.map(
+    ([rawGroupId, permissionIds]) => {
+      const groupId = rawGroupId;
+      const baseGroup = groupsById[groupId]
+
+        .map((rawPermissionId) => {
+          const permissionId = rawPermissionId;
+          if (!permissionId) {
+            return null;
+          }
+          return (
+            permissionsById[permissionId]
+          );
+        })
+        .filter(Boolean);
+
+      return {
+        ...baseGroup,
+        permissions: permissionIds,
+      };
+    }
+  );
+
+  return {
+    permissionGroups: normalizedGroups,
+    permissions: normalizedGroups.flatMap((group) => group.permissions || []),
+  };
 };

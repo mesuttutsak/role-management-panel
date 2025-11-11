@@ -2,21 +2,18 @@ import { useMemo } from "react";
 import ROUTES from "../../routes/routeList";
 import { useHasPermission } from "./useHasPermission";
 import { useAppSelector } from "../../app/hooks";
-import { selectPermissionsStatus } from "../../features/permissions/permissionsSlice";
-import { selectPermissionGroupsStatus } from "../../features/permissionGroups/permissionGroupsSlice";
-import { selectRolesStatus } from "../../features/roles/rolesSlice";
 
 export const useDashboardNavigation = () => {
   const hasPermission = useHasPermission();
-  const permissionsStatus = useAppSelector(selectPermissionsStatus);
-  const permissionGroupsStatus = useAppSelector(selectPermissionGroupsStatus);
-  const rolesStatus = useAppSelector(selectRolesStatus);
+  const user = useAppSelector((state) => state.auth.user);
+  const loginStatus = useAppSelector((state) => state.auth.loginStatus);
 
   const dashboardRoute = ROUTES.find((route) => route.key === "dashboard");
   const dashboardChildren = dashboardRoute?.children ?? [];
 
-  const isAccessReady = permissionsStatus === "succeeded" && permissionGroupsStatus === "succeeded" && rolesStatus === "succeeded";
-  const isAccessLoading = permissionsStatus === "loading" && permissionGroupsStatus === "loading" && rolesStatus === "loading";
+  const hasPermissionPayload = Array.isArray(user?.permissionGroups);
+  const isAccessReady = Boolean(user) && hasPermissionPayload;
+  const isAccessLoading = loginStatus === "loading" && !isAccessReady;
 
   const menuItems = useMemo(() => {
     const candidates = dashboardChildren
@@ -37,6 +34,7 @@ export const useDashboardNavigation = () => {
       if (!item.requiredPermissions) {
         return true;
       }
+      
       return hasPermission(item.requiredPermissions);
     });
   }, [dashboardChildren, hasPermission, isAccessReady]);
@@ -44,6 +42,6 @@ export const useDashboardNavigation = () => {
   return {
     menuItems,
     isAccessReady,
-    isAccessLoading
+    isAccessLoading,
   };
 };
