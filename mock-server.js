@@ -159,6 +159,60 @@ server.delete("/users/:id", (req, res, next) => {
   next();
 });
 
+server.put("/users/:id", (req, res) => {
+  const target = router.db.get("users").find({ id: req.params.id }).value();
+  if (!target) {
+    res.status(404).json({ error: "User not found" });
+    return;
+  }
+  if (target.systemUser) {
+    res.status(403).json({ error: "System user cannot be modified" });
+    return;
+  }
+
+  const allowedFields = ["username", "firstname", "lastname", "roleId"];
+  const updates = allowedFields.reduce((acc, key) => {
+    if (key in req.body) {
+      const value = req.body[key];
+      acc[key] = typeof value === "string" ? value.trim() : value;
+    }
+    return acc;
+  }, {});
+
+  if (!updates.username || !updates.roleId) {
+    res.status(400).json({ error: "username and roleId are required" });
+    return;
+  }
+
+  if (typeof updates.roleId !== "string" || !UUID_REGEX.test(updates.roleId)) {
+    res.status(400).json({ error: "roleId must be a UUID string" });
+    return;
+  }
+
+  const roleExists = router.db.get("roles").some({ id: updates.roleId }).value();
+  if (!roleExists) {
+    res.status(400).json({ error: "roleId must reference an existing role" });
+    return;
+  }
+
+  const normalizedUsername = updates.username.toLowerCase();
+  const usernameTaken = router.db
+    .get("users")
+    .some(
+      (user) =>
+        user.id !== req.params.id && (user.username || "").trim().toLowerCase() === normalizedUsername
+    )
+    .value();
+  if (usernameTaken) {
+    res.status(409).json({ error: "Username already exists" });
+    return;
+  }
+
+  router.db.get("users").find({ id: req.params.id }).assign(updates).write();
+  const updated = router.db.get("users").find({ id: req.params.id }).value();
+  res.json(updated);
+});
+
 server.delete("/roles/:id", (req, res, next) => {
   const record = router.db.get("roles").find({ id: req.params.id }).value();
   if (record && record.systemRole) {

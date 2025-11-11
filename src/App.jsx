@@ -4,49 +4,50 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ROUTES from "./routes/routeList";
 import { RequireAuth } from "./routes/RequireAuth";
 
+const renderRoutes = (routes) =>
+  routes.map(
+    ({
+      key,
+      path,
+      element,
+      children,
+      requiresAuth,
+      requiredPermissions,
+      index,
+    }) => {
+      let routeElement = element;
+
+      if (requiresAuth || requiredPermissions) {
+        routeElement = (
+          <RequireAuth requiredPermissions={requiredPermissions}>
+            {routeElement}
+          </RequireAuth>
+        );
+      }
+
+      const nestedRoutes = children?.length ? renderRoutes(children) : null;
+
+      if (index) {
+        return (
+          <Route key={key} index element={routeElement}>
+            {nestedRoutes}
+          </Route>
+        );
+      }
+
+      return (
+        <Route key={key} path={path} element={routeElement}>
+          {nestedRoutes}
+        </Route>
+      );
+    }
+  );
+
 export function App() {
   return (
     <BrowserRouter>
       <Suspense fallback={<Spinner fullPage message="Loading..." />}>
-        <Routes>
-        {ROUTES.map(({ key, path, element, children, requiresAuth, requiredPermissions }) => {
-          let routeElement = element;
-
-          if (requiresAuth || requiredPermissions) {
-            routeElement = (
-              <RequireAuth requiredPermissions={requiredPermissions}>
-                {routeElement}
-              </RequireAuth>
-            );
-          }
-
-          return (
-            <Route key={key} path={path} element={routeElement}>
-              {children?.map((child) => {
-                const childElement = child.requiredPermissions ? (
-                  <RequireAuth requiredPermissions={child.requiredPermissions}>
-                    {child.element}
-                  </RequireAuth>
-                ) : (
-                  child.element
-                );
-
-                if (child.index) {
-                  return <Route key={child.key} index element={childElement} />;
-                }
-
-                return (
-                  <Route
-                    key={child.key}
-                    path={child.path}
-                    element={childElement}
-                  />
-                );
-              })}
-            </Route>
-          );
-        })}
-        </Routes>
+        <Routes>{renderRoutes(ROUTES)}</Routes>
       </Suspense>
     </BrowserRouter>
   );

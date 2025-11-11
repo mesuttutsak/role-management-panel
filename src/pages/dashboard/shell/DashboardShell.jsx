@@ -1,12 +1,12 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Suspense } from "react";
 import { useEffect } from "react";
-import { DashboardLayout } from "../core/ui/layouts/DashboardLayout";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { logout, setActivePage } from "../features/auth/authSlice";
+import { DashboardLayout } from "../../../core/ui/layouts/DashboardLayout";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { logout, setActivePage } from "../../../features/auth/authSlice";
 
-import { useDashboardNavigation } from "../core/hooks/useDashboardNavigation";
-import { Spinner } from "../core/ui/Spinner";
+import { useDashboardNavigation } from "../../../core/hooks/useDashboardNavigation";
+import { Spinner } from "../../../core/ui/Spinner";
 
 function getActiveItemId(pathname) {
   if (pathname === "/dashbord" || pathname === "/dashbord/") {

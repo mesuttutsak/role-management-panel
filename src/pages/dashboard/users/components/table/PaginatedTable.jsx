@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { TableSurface, Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell } from "../../core/ui/Table";
-import { Spinner } from "../../core/ui/Spinner";
-import { Surface } from "../../core/ui/Surface";
+import { TableSurface, Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell } from "../../../../../core/ui/Table";
+import { Spinner } from "../../../../../core/ui/Spinner";
+import { Surface } from "../../../../../core/ui/Surface";
 import { StringFilterInput } from "./StringFilterInput";
-import { classNames } from "../../core/utils/general";
+import { classNames } from "../../../../../core/utils/general";
 import styles from "./PaginatedTable.module.css";
 
 const DEFAULT_CLASSNAMES = {

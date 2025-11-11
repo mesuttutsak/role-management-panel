@@ -1,5 +1,11 @@
 import { Fragment, useMemo, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  Transition,
+  TransitionChild,
+} from "@headlessui/react";
 import { classNames } from "../../../utils/general";
 import styles from "./DashboardLayout.module.css";
 import { Sidebar } from "./Sidebar";
@@ -79,13 +85,13 @@ export function DashboardLayout({
         </div>
       </div>
 
-      <Transition show={isMobileSidebarOpen} as={Fragment}>
+      <Transition show={isMobileSidebarOpen} as={Fragment} unmount>
         <Dialog
           as="div"
           className={styles.mobileDialog}
           onClose={() => setMobileSidebarOpen(false)}
         >
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="transition-opacity ease-linear duration-150"
             enterFrom="opacity-0"
@@ -94,10 +100,10 @@ export function DashboardLayout({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className={styles.mobileOverlay} />
-          </Transition.Child>
+            <DialogBackdrop className={styles.mobileOverlay} />
+          </TransitionChild>
 
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="transition ease-in-out duration-200 transform"
             enterFrom="-translate-x-full"
@@ -107,10 +113,11 @@ export function DashboardLayout({
             leaveTo="-translate-x-full"
           >
             <div className={styles.mobilePanelContainer}>
-              <Dialog.Panel className={styles.mobilePanel}>
+              <DialogPanel className={styles.mobilePanel}>
                 <div className={styles.mobilePanelInner}>
                   <Sidebar
                     items={items}
+                    collapsed={false}
                     activeItemId={activeItemId}
                     onNavigate={handleNavigate}
                     onLogout={handleLogout}
@@ -119,9 +126,9 @@ export function DashboardLayout({
                     isMobile
                   />
                 </div>
-              </Dialog.Panel>
+              </DialogPanel>
             </div>
-          </Transition.Child>
+          </TransitionChild>
         </Dialog>
       </Transition>
     </>

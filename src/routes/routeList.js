@@ -2,20 +2,28 @@ import { lazy } from "react";
 import { Navigate } from "react-router-dom";
 import { SessionRedirect } from "./SessionRedirect";
 
-const LoginPage = lazy(() => import("../pages/LoginPage").then((m) => ({ default: m.LoginPage })));
+const LoginPage = lazy(() =>
+  import("../pages/login/LoginPage").then((m) => ({ default: m.LoginPage }))
+);
 const DashboardShell = lazy(() =>
-  import("../pages/DashboardShell").then((m) => ({ default: m.DashboardShell }))
+  import("../pages/dashboard/shell/DashboardShell").then((m) => ({ default: m.DashboardShell }))
 );
 const DashboardOverview = lazy(() =>
-  import("../pages/DashboardOverview").then((m) => ({
+  import("../pages/dashboard/overview/DashboardOverview").then((m) => ({
     default: m.DashboardOverview,
   }))
 );
 const DashboardUsers = lazy(() =>
-  import("../pages/DashboardUsers").then((m) => ({ default: m.DashboardUsers }))
+  import("../pages/dashboard/users/routes").then((m) => ({ default: m.DashboardUsers }))
+);
+const DashboardUsersCreate = lazy(() =>
+  import("../pages/dashboard/users/routes/create").then((m) => ({ default: m.DashboardUsersCreate }))
+);
+const DashboardUsersEdit = lazy(() =>
+  import("../pages/dashboard/users/routes/edit").then((m) => ({ default: m.DashboardUsersEdit }))
 );
 const DashboardRoles = lazy(() =>
-  import("../pages/DashboardRoles").then((m) => ({ default: m.DashboardRoles }))
+  import("../pages/dashboard/roles/DashboardRoles").then((m) => ({ default: m.DashboardRoles }))
 );
 
 const ROUTES = [
@@ -50,6 +58,20 @@ const ROUTES = [
         requiredPermissions: { group: "USERS", permissions: "navigate" },
         navigation: { id: "users", label: "Users", icon: "FiUser" },
         isMenuItem: true,
+        children: [
+          {
+            key: "dashboard-users-create",
+            path: "create",
+            element: <DashboardUsersCreate />,
+            requiredPermissions: { group: "USERS", permissions: "write" },
+          },
+          {
+            key: "dashboard-users-edit",
+            path: "edit/:id",
+            element: <DashboardUsersEdit />,
+            requiredPermissions: { group: "USERS", permissions: "write" },
+          },
+        ],
       },
       {
         key: "dashboard-roles",

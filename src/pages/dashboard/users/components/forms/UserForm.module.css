@@ -1,25 +1,5 @@
-.dialogRoot {
-  @apply fixed inset-0 z-50 overflow-y-auto;
-}
-
-.backdrop {
-  @apply fixed inset-0 bg-slate-900/40;
-}
-
-.wrapper {
-  @apply flex min-h-full items-center justify-center p-4;
-}
-
-.panel {
-  @apply w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all;
-}
-
-.title {
-  @apply text-lg font-semibold text-slate-900;
-}
-
 .form {
-  @apply mt-4 flex flex-col gap-4;
+  @apply flex flex-col gap-4;
 }
 
 .field {
@@ -44,4 +24,8 @@
 
 .formError {
   @apply text-sm text-red-600;
+}
+
+.modalBody {
+  @apply mt-0;
 }

@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
-import { AuthLayout } from "../core/ui/layouts/AuthLayout/AuthLayout";
-import { Button } from "../core/ui/Button";
-import { Input } from "../core/ui/Input";
+import { AuthLayout } from "../../core/ui/layouts/AuthLayout/AuthLayout";
+import { Button } from "../../core/ui/Button";
+import { Input } from "../../core/ui/Input";
 import { useNavigate } from "react-router-dom";
 import {
   FormField,
   FormFieldset,
   FormLabel,
   FormLegend,
-} from "../core/ui/form";
+} from "../../core/ui/form";
 import { loginLiterals } from "./login.literals";
 import styles from "./LoginPage.module.css";
-import { Info } from "../core/ui/Info";
-import { Surface } from "../core/ui/Surface";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { Info } from "../../core/ui/Info";
+import { Surface } from "../../core/ui/Surface";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   clearLoginError,
   fetchAdminUser,
   login,
-} from "../features/auth/authSlice";
+} from "../../features/auth/authSlice";
 
 export function LoginPage() {
   const [username, setUsername] = useState("");

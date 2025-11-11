@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Info } from "../core/ui/Info";
+import { Info } from "../../../core/ui/Info";
 import styles from "./DashboardUnauthorized.module.css";
 
 export function DashboardUnauthorized({ message = "You do not have permission to access this page." }) {

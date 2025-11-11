@@ -15,6 +15,10 @@ const initialState = {
   totalError: null,
   createStatus: "idle",
   createError: null,
+  updateStatus: "idle",
+  updateError: null,
+  createStatus: "idle",
+  createError: null,
   filters: {
     username: "",
     firstname: "",
@@ -190,6 +194,31 @@ export const createUser = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  "users/update",
+  async ({ id, ...payload }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => null);
+        const message = errorBody?.error || "User could not be updated";
+        return rejectWithValue(message);
+      }
+
+      return await response.json();
+    } catch (error) {
+      return rejectWithValue(error.message || "User could not be updated");
+    }
+  }
+);
+
 const usersSlice = createSlice({
   name: "users",
   initialState,
@@ -259,6 +288,17 @@ const usersSlice = createSlice({
       .addCase(createUser.rejected, (state, action) => {
         state.createStatus = "failed";
         state.createError = action.payload || action.error.message || null;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.updateStatus = "loading";
+        state.updateError = null;
+      })
+      .addCase(updateUser.fulfilled, (state) => {
+        state.updateStatus = "succeeded";
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.updateStatus = "failed";
+        state.updateError = action.payload || action.error.message || null;
       });
   },
 });

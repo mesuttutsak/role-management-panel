@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
-import APP_CONFIG from "../../config";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import APP_CONFIG from "../../../../config";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import {
   fetchUsers,
   fetchUsersTotalCount,
@@ -8,17 +8,17 @@ import {
   setPage,
   setPageSize,
   setSearchFilters,
-} from "../../features/users/usersSlice";
+} from "../../../../features/users/usersSlice";
 import {
   selectRolesById,
   selectRoles,
   fetchRolesByIds,
   fetchRoles,
-} from "../../features/roles/rolesSlice";
+} from "../../../../features/roles/rolesSlice";
 
 const { API_BASE_URL } = APP_CONFIG;
 
-export function useDashboardUsersTable({ enabled = true, canDelete = true } = {}) {
+export function useUsersTable({ enabled = true, canDelete = true } = {}) {
   const dispatch = useAppDispatch();
   const {
     records: data,
