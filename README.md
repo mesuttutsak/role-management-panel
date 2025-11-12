@@ -8,14 +8,40 @@ React 19, Redux Toolkit, Tailwind CSS ve Headless UI üzerinde kurulu; kullanıc
 - **Kapsam**: Kullanıcı CRUD ve filtreleme, rol izin editörü, izin farkındalıklı oturum yönetimi.
 
 ## 2. Kurulum & Çalıştırma
-```bash
-npm install          # bağımlılıkları yükle
-npm run mock:server  # backend'i (json-server) http://localhost:3001 üzerinde başlat
-npm run start        # frontend'i(react) dev sunucusunu http://localhost:3000'da çalıştır
-```
-- Varsayılan giriş: `admin / 1234` (systemUser).
-- Prod build: `npm run build`.
-- Config: `src/config/index.js` içinde `API_BASE_URL` ve oturum anahtarı tanımlı.
+1. Bağımlılıkları yükle  
+   ```bash
+   npm install
+   ```
+2. Mock API’yi çalıştır  
+   ```bash
+   npm run mock:server   # http://localhost:3001
+   ```
+   - İstersen `.env.local` içine `MOCK_SERVER_PORT=4002` yazıp `npm run mock:server` ile portu değiştirebilirsin (script bu değeri okuyor).
+3. Frontend’i başlat  
+   ```bash
+   npm start             # http://localhost:3000
+   ```
+4. Prod derleme  
+   ```bash
+   npm run build
+   ```
+
+### Ortam değişkenleri
+- React tarafında kullanılan değerler `REACT_APP_` ile başlar. Örnek `.env`:
+  ```
+  REACT_APP_API_BASE_URL=http://localhost:4001
+  REACT_APP_SESSION_KEY=localLoggedUser
+  REACT_APP_SESSION_DURATION_MS=3600000
+  ```
+- `src/config/index.js` bu env değerlerini okur; `.env.local` dosyasını repo dışında tutabilirsin.
+
+### Giriş bilgisi
+- Varsayılan admin: `admin / 1234` (json-server seed).
+- Diğer kullanıcılar `db.json` içinde.
+
+### Mock API hakkında
+- JSON verileri `db.json` dosyasından okunur; bu dosyayı güncellediğinde mock-server’ı yeniden başlatman gerekir.
+- `mock-server.js` role/permission guard’larını içerir (dup username, sistem kullanıcısı silmeme vb.).
 
 ## 3. Mimari
 ### 3.1 Klasör yapısı
@@ -65,6 +91,7 @@ src/
 - json-server da `_page`/`_limit` parametreleri json-server'a uyumlu şekilde istek atılmıştır. 
 
 ## 4. Geliştirilebilecekler
+- Permission kaynaklı `disabled` olan alanlarda poup ve veya tooltip ile bilgilendirme.
 - Rol editöründe toplu rol oluşturma.
 - alert'ler yerine dialog component eklenemesi.
 - Proje core'un Redux state management kullanacak generic notification yazılmaıs

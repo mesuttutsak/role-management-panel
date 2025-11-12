@@ -52,8 +52,6 @@ export function DashboardOverview() {
         ))}
       </div>
     </Surface>
-    <Surface fullWidth className={styles.readmeCard}>
-    </Surface>
     </div>
   );
 }
