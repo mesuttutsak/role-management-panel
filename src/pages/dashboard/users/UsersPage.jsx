@@ -7,7 +7,7 @@ import { useHasPermission } from "../../../core/hooks/useHasPermission";
 import { DashboardUnauthorized } from "../../shared/DashboardUnauthorized/DashboardUnauthorized";
 import { Spinner } from "../../../core/ui/Spinner";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { createUser, fetchUsers, fetchUsersTotalCount, updateUser } from "../../../features/users/usersSlice";
+import { createUser, updateUser } from "../../../features/users/usersSlice";
 import { Outlet, useNavigate } from "react-router-dom";
 import styles from "./UsersPage.module.css";
 
@@ -198,6 +198,7 @@ export function DashboardUsers() {
     handleDirectPageChange,
     handlePageSizeChange,
     handleFilterChange,
+    refreshUsers,
   } = useUsersTable({ enabled: canReadUsers, canDelete: canDeleteUsers });
 
   const getUserById = useCallback(
@@ -251,12 +252,9 @@ export function DashboardUsers() {
       }
 
       await dispatch(createUser(payload)).unwrap();
-      await Promise.all([
-        dispatch(fetchUsers({ page, pageSize, filters })),
-        dispatch(fetchUsersTotalCount({ filters })),
-      ]);
+      refreshUsers();
     },
-    [dispatch, page, pageSize, filters, decoratedData]
+    [dispatch, refreshUsers, decoratedData]
   );
 
   const handleUpdateUser = useCallback(
@@ -273,12 +271,9 @@ export function DashboardUsers() {
       }
 
       await dispatch(updateUser(payload)).unwrap();
-      await Promise.all([
-        dispatch(fetchUsers({ page, pageSize, filters })),
-        dispatch(fetchUsersTotalCount({ filters })),
-      ]);
+      refreshUsers();
     },
-    [dispatch, page, pageSize, filters, decoratedData]
+    [dispatch, refreshUsers, decoratedData]
   );
 
   if (isAccessLoading) {

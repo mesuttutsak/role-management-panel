@@ -988,6 +988,24 @@
       "firstname": "Patient050",
       "lastname": "User",
       "roleId": "c5dd6a1a-db56-4fac-90dd-f562a1fb58fc"
+    },
+    {
+      "id": "803dd9ea-6e3f-4065-b88d-639a71c4952b",
+      "systemUser": false,
+      "username": "TestUser",
+      "password": "1234",
+      "firstname": "TEST FIRST NAME",
+      "lastname": "TEST LAST NAME",
+      "roleId": "4fb620f0-3e55-4b8a-9e6b-2265920357b6"
+    },
+    {
+      "id": "586eecdc-a40a-4fa1-97dc-905439f9d4cf",
+      "systemUser": false,
+      "username": "123123",
+      "password": "1234",
+      "firstname": "asdasd",
+      "lastname": "asdad",
+      "roleId": "4fb620f0-3e55-4b8a-9e6b-2265920357b6"
     }
   ]
 }

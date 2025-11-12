@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import APP_CONFIG from "../../../../config";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import {
@@ -55,13 +55,31 @@ export function useUsersTable({ enabled = true, canDelete = true } = {}) {
     }
   }, [dispatch, roles.length, enabled]);
 
+  const filtersSignature = JSON.stringify(filters || {});
+  const [refreshToken, setRefreshToken] = useState(0);
+  const lastTotalFiltersRef = useRef(null);
+  const lastRefreshTokenRef = useRef(null);
+
+  const triggerRefresh = useCallback(() => {
+    setRefreshToken((token) => token + 1);
+  }, []);
+
   useEffect(() => {
     if (!enabled) {
       return;
     }
     dispatch(fetchUsers({ page, pageSize, filters }));
-    dispatch(fetchUsersTotalCount({ filters }));
-  }, [dispatch, page, pageSize, filters, enabled]);
+
+    const shouldFetchTotal =
+      lastTotalFiltersRef.current !== filtersSignature ||
+      lastRefreshTokenRef.current !== refreshToken;
+
+    if (shouldFetchTotal) {
+      lastTotalFiltersRef.current = filtersSignature;
+      lastRefreshTokenRef.current = refreshToken;
+      dispatch(fetchUsersTotalCount({ filters }));
+    }
+  }, [dispatch, page, pageSize, filters, enabled, filtersSignature, refreshToken]);
 
   useEffect(() => {
     if (!enabled || !data.length) {
@@ -122,16 +140,15 @@ export function useUsersTable({ enabled = true, canDelete = true } = {}) {
         const shouldGoPrevPage = recordCount === 1 && page > 1;
         if (shouldGoPrevPage) {
           dispatch(setPage(page - 1));
-        } else {
-          dispatch(fetchUsers({ page, pageSize, filters }));
         }
+        triggerRefresh();
       } catch (deleteError) {
         window.alert(deleteError.message || "User deletion failed.");
       } finally {
         setDeletingId(null);
       }
     },
-    [dispatch, page, pageSize, recordCount, filters, currentUserId, canDelete]
+    [dispatch, page, pageSize, recordCount, filters, currentUserId, canDelete, triggerRefresh]
   );
 
   const totalLoading = totalStatus === "loading";
@@ -201,5 +218,6 @@ export function useUsersTable({ enabled = true, canDelete = true } = {}) {
     handleDirectPageChange,
     handlePageSizeChange,
     handleFilterChange,
+    refreshUsers: triggerRefresh,
   };
 }

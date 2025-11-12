@@ -167,7 +167,6 @@ export function PaginatedTable({
         <TableCell colSpan={columnCount}></TableCell>
         <TableCell colSpan={columnCount}></TableCell>
         <TableCell colSpan={columnCount}></TableCell>
-        <TableCell colSpan={columnCount}></TableCell>
         <TableCell colSpan={columnCount} className={resolvedClassNames.actionCell}></TableCell>
       </>
     );
@@ -288,6 +287,7 @@ export function PaginatedTable({
           </button>
         </div>
         <span className={resolvedClassNames.paginationTotal}>
+        <span>Total Count:</span>
           {totalLoading ? (
             <span className={resolvedClassNames.totalSpinner} aria-live="polite" />
           ) : (
