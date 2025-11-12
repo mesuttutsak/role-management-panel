@@ -98,5 +98,5 @@ src/
 - PaginatedTable'ın List sayfalarını yönetmek için yazılmış generic bir hook fetch metodu ve use case'lerini kendi içinde gerçekleştirebilmesi. Prop drilling ile veri yönetime zorunluluğu oratadan kaldırır.
 
 ## 5. Efor & İletişim
-- Yaklaşık **22 saat** (backend(json-server) + frontend(react) düzenlemeleri dahil).
+- Yaklaşık **28 saat** (backend(json-server) + frontend(react) düzenlemeleri dahil).
 - Mesut Tutsak — `ttsk.mesut@gmail.com` - `+90 0536 563 31 46`.
