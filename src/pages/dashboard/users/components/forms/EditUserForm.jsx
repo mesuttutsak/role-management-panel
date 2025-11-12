@@ -79,7 +79,7 @@ export function EditUserForm({ open, user, onClose, roles = [], onSubmit }) {
       });
       onClose();
     } catch (error) {
-      setFormError(error || "Failed to update user.");
+      setFormError(error?.message || error ||  "Failed to update user.");
     } finally {
       setSubmitting(false);
     }

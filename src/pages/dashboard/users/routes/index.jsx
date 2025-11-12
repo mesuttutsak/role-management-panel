@@ -13,6 +13,28 @@ import styles from "./DashboardUsers.module.css";
 
 import { Button } from "../../../../core/ui/Button";
 
+const normalizeText = (value) =>
+  typeof value === "string" ? value.trim().toLowerCase() : "";
+
+const hasDuplicateFullName = (records, firstname, lastname, excludeId) => {
+  const normalizedFirst = normalizeText(firstname);
+  const normalizedLast = normalizeText(lastname);
+
+  if (!normalizedFirst || !normalizedLast) {
+    return false;
+  }
+
+  return records.some((record) => {
+    if (excludeId && record.id === excludeId) {
+      return false;
+    }
+    return (
+      normalizeText(record.firstname) === normalizedFirst &&
+      normalizeText(record.lastname) === normalizedLast
+    );
+  });
+};
+
 const buildRoleFilterOptions = (roles = []) => [
   { value: "", label: "All" },
   ...roles.map((role) => ({
@@ -218,6 +240,16 @@ export function DashboardUsers() {
         throw new Error("This username is already in use.");
       }
 
+      const duplicateFullName = hasDuplicateFullName(
+        decoratedData,
+        payload.firstname,
+        payload.lastname
+      );
+
+      if (duplicateFullName) {
+        throw new Error("This full name is already in use.");
+      }
+
       await dispatch(createUser(payload)).unwrap();
       await Promise.all([
         dispatch(fetchUsers({ page, pageSize, filters })),
@@ -229,13 +261,24 @@ export function DashboardUsers() {
 
   const handleUpdateUser = useCallback(
     async (payload) => {
+      const duplicateFullName = hasDuplicateFullName(
+        decoratedData,
+        payload.firstname,
+        payload.lastname,
+        payload.id
+      );
+
+      if (duplicateFullName) {
+        throw new Error("This full name is already in use.");
+      }
+
       await dispatch(updateUser(payload)).unwrap();
       await Promise.all([
         dispatch(fetchUsers({ page, pageSize, filters })),
         dispatch(fetchUsersTotalCount({ filters })),
       ]);
     },
-    [dispatch, page, pageSize, filters]
+    [dispatch, page, pageSize, filters, decoratedData]
   );
 
   if (isAccessLoading) {

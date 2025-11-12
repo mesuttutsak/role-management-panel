@@ -188,12 +188,20 @@ export function PaginatedTable({
                 <TableCell colSpan={columnCount} className={resolvedClassNames.emptyStateCell}>
                   <Spinner message={fallbackLoadingMessage} />
                 </TableCell>
+                <TableCell colSpan={columnCount}></TableCell>
+                <TableCell colSpan={columnCount}></TableCell>
+                <TableCell colSpan={columnCount}></TableCell>
+                <TableCell colSpan={columnCount} className={resolvedClassNames.actionCell}></TableCell>
               </TableRow>
             ) : isEmpty ? (
               <TableRow>
                 <TableCell colSpan={columnCount} className={resolvedClassNames.emptyStateCell}>
                   {fallbackEmptyMessage}
                 </TableCell>
+                <TableCell colSpan={columnCount}></TableCell>
+                <TableCell colSpan={columnCount}></TableCell>
+                <TableCell colSpan={columnCount}></TableCell>
+                <TableCell colSpan={columnCount} className={resolvedClassNames.actionCell}></TableCell>
               </TableRow>
             ) : (
               table.getRowModel().rows.map((row) => (

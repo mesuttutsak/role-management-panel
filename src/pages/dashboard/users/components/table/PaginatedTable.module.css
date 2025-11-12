@@ -58,7 +58,7 @@
 }
 
 .actionCell {
-  @apply w-12 text-center;
+  @apply w-16 text-center;
 }
 
 .emptyStateCell {

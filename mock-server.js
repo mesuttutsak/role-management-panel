@@ -39,6 +39,31 @@ server.use((req, _res, next) => {
   next();
 });
 
+const normalizeNamePart = (value) =>
+  typeof value === "string" ? value.trim().toLowerCase() : "";
+
+const hasDuplicateFullName = (db, firstname, lastname, excludeUserId) => {
+  const normalizedFirst = normalizeNamePart(firstname);
+  const normalizedLast = normalizeNamePart(lastname);
+
+  if (!normalizedFirst || !normalizedLast) {
+    return false;
+  }
+
+  return db
+    .get("users")
+    .some((user) => {
+      if (excludeUserId && user.id === excludeUserId) {
+        return false;
+      }
+      return (
+        normalizeNamePart(user.firstname) === normalizedFirst &&
+        normalizeNamePart(user.lastname) === normalizedLast
+      );
+    })
+    .value();
+};
+
 server.post("/auth/login", (req, res) => {
   const { username, password } = req.body || {};
 
@@ -142,6 +167,17 @@ server.post("/users", (req, res, next) => {
     return acc;
   }, {});
 
+  const duplicateFullName = hasDuplicateFullName(
+    router.db,
+    sanitizedBody.firstname,
+    sanitizedBody.lastname
+  );
+
+  if (duplicateFullName) {
+    res.status(409).json({ error: "A user with the same full name already exists" });
+    return;
+  }
+
   req.body = {
     id: randomUUID(),
     systemUser: false,
@@ -205,6 +241,23 @@ server.put("/users/:id", (req, res) => {
     .value();
   if (usernameTaken) {
     res.status(409).json({ error: "Username already exists" });
+    return;
+  }
+
+  const nextFirstname =
+    updates.firstname !== undefined ? updates.firstname : target.firstname;
+  const nextLastname =
+    updates.lastname !== undefined ? updates.lastname : target.lastname;
+
+  const duplicateFullName = hasDuplicateFullName(
+    router.db,
+    nextFirstname,
+    nextLastname,
+    target.id
+  );
+
+  if (duplicateFullName) {
+    res.status(409).json({ error: "A user with the same full name already exists" });
     return;
   }
 
