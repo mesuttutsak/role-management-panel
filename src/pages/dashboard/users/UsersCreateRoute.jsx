@@ -1,5 +1,5 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { AddUserForm } from "../components/forms/AddUserForm";
+import { AddUserForm } from "./components/forms/AddUserForm";
 
 export function DashboardUsersCreate() {
   const navigate = useNavigate();

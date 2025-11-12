@@ -46,7 +46,7 @@ const renderRoutes = (routes) =>
 export function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<Spinner fullPage message="Loading..." />}>
+      <Suspense fallback={<div className="flex align-center justify-center h-screen w-full"> <Spinner fullPage/> </div>}>
         <Routes>{renderRoutes(ROUTES)}</Routes>
       </Suspense>
     </BrowserRouter>

@@ -1,17 +1,17 @@
 import { useMemo, useCallback } from "react";
-import { Surface } from "../../../../core/ui/Surface";
-import { Icon } from "../../../../core/ui/Icon";
-import { PaginatedTable } from "../components/table/PaginatedTable";
-import { useUsersTable } from "../hooks/useUsersTable";
-import { useHasPermission } from "../../../../core/hooks/useHasPermission";
-import { DashboardUnauthorized } from "../../../shared/DashboardUnauthorized/DashboardUnauthorized";
-import { Spinner } from "../../../../core/ui/Spinner";
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { createUser, fetchUsers, fetchUsersTotalCount, updateUser } from "../../../../features/users/usersSlice";
+import { Surface } from "../../../core/ui/Surface";
+import { Icon } from "../../../core/ui/Icon";
+import { PaginatedTable } from "../../../core/ui/PaginatedTable";
+import { useUsersTable } from "./hooks/useUsersTable";
+import { useHasPermission } from "../../../core/hooks/useHasPermission";
+import { DashboardUnauthorized } from "../../shared/DashboardUnauthorized/DashboardUnauthorized";
+import { Spinner } from "../../../core/ui/Spinner";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { createUser, fetchUsers, fetchUsersTotalCount, updateUser } from "../../../features/users/usersSlice";
 import { Outlet, useNavigate } from "react-router-dom";
-import styles from "./DashboardUsers.module.css";
+import styles from "./UsersPage.module.css";
 
-import { Button } from "../../../../core/ui/Button";
+import { Button } from "../../../core/ui/Button";
 
 const normalizeText = (value) =>
   typeof value === "string" ? value.trim().toLowerCase() : "";
@@ -111,8 +111,8 @@ const tableColumns = (
         const editDisabled = !canEditUsers;
         return (
           <div className={styles.actionButtons}>
-            <button
-              type="button"
+            <Button
+              type="Button"
               className={styles.editButton}
               onClick={() => onEdit(user)}
               disabled={editDisabled}
@@ -123,9 +123,9 @@ const tableColumns = (
               }
             >
               <Icon icon="FiEdit" className={styles.editIcon} />
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
+              type="Button"
               className={styles.deleteButton}
               onClick={() => onDelete(user)}
               disabled={deleteDisabled}
@@ -144,7 +144,7 @@ const tableColumns = (
               ) : (
                 <Icon icon="FiTrash2" className={styles.deleteIcon} />
               )}
-            </button>
+            </Button>
           </div>
         );
       },
@@ -293,7 +293,7 @@ export function DashboardUsers() {
         </span>
         <span>
           <Button
-            type="button"
+            type="Button"
             onClick={navigateToCreate}
             disabled={!canCreateUsers}
             title={!canCreateUsers ? "You do not have permission to add users" : undefined}

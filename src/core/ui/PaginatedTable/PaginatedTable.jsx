@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { TableSurface, Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell } from "../../../../../core/ui/Table";
-import { Spinner } from "../../../../../core/ui/Spinner";
-import { Surface } from "../../../../../core/ui/Surface";
+import { TableSurface, Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell } from "../Table";
+import { Spinner } from "../Spinner";
+import { Surface } from "../Surface";
 import { StringFilterInput } from "./StringFilterInput";
-import { classNames } from "../../../../../core/utils/general";
+import { classNames } from "../../utils/general";
 import styles from "./PaginatedTable.module.css";
 
 const DEFAULT_CLASSNAMES = {
@@ -158,6 +158,21 @@ export function PaginatedTable({
     );
   };
 
+  const renderEmptyRowPadding = () => {
+    if (!columnCount) {
+      return null;
+    }
+    return (
+      <>
+        <TableCell colSpan={columnCount}></TableCell>
+        <TableCell colSpan={columnCount}></TableCell>
+        <TableCell colSpan={columnCount}></TableCell>
+        <TableCell colSpan={columnCount}></TableCell>
+        <TableCell colSpan={columnCount} className={resolvedClassNames.actionCell}></TableCell>
+      </>
+    );
+  };
+
   return (
     <>
       <TableSurface
@@ -188,20 +203,14 @@ export function PaginatedTable({
                 <TableCell colSpan={columnCount} className={resolvedClassNames.emptyStateCell}>
                   <Spinner message={fallbackLoadingMessage} />
                 </TableCell>
-                <TableCell colSpan={columnCount}></TableCell>
-                <TableCell colSpan={columnCount}></TableCell>
-                <TableCell colSpan={columnCount}></TableCell>
-                <TableCell colSpan={columnCount} className={resolvedClassNames.actionCell}></TableCell>
+                {renderEmptyRowPadding()}
               </TableRow>
             ) : isEmpty ? (
               <TableRow>
                 <TableCell colSpan={columnCount} className={resolvedClassNames.emptyStateCell}>
                   {fallbackEmptyMessage}
                 </TableCell>
-                <TableCell colSpan={columnCount}></TableCell>
-                <TableCell colSpan={columnCount}></TableCell>
-                <TableCell colSpan={columnCount}></TableCell>
-                <TableCell colSpan={columnCount} className={resolvedClassNames.actionCell}></TableCell>
+                {renderEmptyRowPadding()}
               </TableRow>
             ) : (
               table.getRowModel().rows.map((row) => (

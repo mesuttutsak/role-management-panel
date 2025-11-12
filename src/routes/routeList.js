@@ -14,13 +14,13 @@ const DashboardOverview = lazy(() =>
   }))
 );
 const DashboardUsers = lazy(() =>
-  import("../pages/dashboard/users/routes").then((m) => ({ default: m.DashboardUsers }))
+  import("../pages/dashboard/users/UsersPage").then((m) => ({ default: m.DashboardUsers }))
 );
 const DashboardUsersCreate = lazy(() =>
-  import("../pages/dashboard/users/routes/create").then((m) => ({ default: m.DashboardUsersCreate }))
+  import("../pages/dashboard/users/UsersCreateRoute").then((m) => ({ default: m.DashboardUsersCreate }))
 );
 const DashboardUsersEdit = lazy(() =>
-  import("../pages/dashboard/users/routes/edit").then((m) => ({ default: m.DashboardUsersEdit }))
+  import("../pages/dashboard/users/UsersEditRoute").then((m) => ({ default: m.DashboardUsersEdit }))
 );
 const DashboardRoles = lazy(() =>
   import("../pages/dashboard/roles/DashboardRoles").then((m) => ({ default: m.DashboardRoles }))
@@ -78,7 +78,7 @@ const ROUTES = [
         path: "roles",
         element: <DashboardRoles />,
         requiredPermissions: { group: "ROLES", permissions: "navigate" },
-        navigation: { id: "roles", label: "Roles", icon: "FiShield" },
+        navigation: { id: "roles", label: "Role Permissions", icon: "FiShield" },
         isMenuItem: true,
       },
     ],

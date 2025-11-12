@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
-import { EditUserForm } from "../components/forms/EditUserForm";
+import { EditUserForm } from "./components/forms/EditUserForm";
 
 export function DashboardUsersEdit() {
   const navigate = useNavigate();

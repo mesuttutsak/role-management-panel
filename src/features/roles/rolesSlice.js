@@ -7,6 +7,8 @@ const initialState = {
   status: "idle",
   error: null,
   byId: {},
+  updateStatus: "idle",
+  updateError: null,
 };
 
 export const fetchRoles = createAsyncThunk(
@@ -56,6 +58,31 @@ export const fetchRolesByIds = createAsyncThunk(
   }
 );
 
+export const updateRole = createAsyncThunk(
+  "roles/update",
+  async ({ id, ...payload }, { rejectWithValue }) => {
+    if (!id) {
+      return rejectWithValue("Role id is required");
+    }
+    try {
+      const response = await fetch(`${API_BASE_URL}/roles/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => null);
+        throw new Error(errorBody?.error || "Role could not be updated");
+      }
+      return await response.json();
+    } catch (error) {
+      return rejectWithValue(error.message || "Role could not be updated");
+    }
+  }
+);
+
 const rolesSlice = createSlice({
   name: "roles",
   initialState,
@@ -87,6 +114,22 @@ const rolesSlice = createSlice({
             state.byId[role.id] = role;
           }
         });
+      })
+      .addCase(updateRole.pending, (state) => {
+        state.updateStatus = "loading";
+        state.updateError = null;
+      })
+      .addCase(updateRole.fulfilled, (state, action) => {
+        state.updateStatus = "succeeded";
+        state.updateError = null;
+        const role = action.payload;
+        if (role?.id) {
+          state.byId[role.id] = role;
+        }
+      })
+      .addCase(updateRole.rejected, (state, action) => {
+        state.updateStatus = "failed";
+        state.updateError = action.payload || action.error.message || null;
       });
   },
 });
@@ -111,6 +154,16 @@ export const selectRolesById = createSelector(
 export const selectRoles = createSelector(
   [selectRolesById],
   (byId) => Object.values(byId)
+);
+
+export const selectRoleUpdateStatus = createSelector(
+  [selectRolesState],
+  (roles) => roles.updateStatus
+);
+
+export const selectRoleUpdateError = createSelector(
+  [selectRolesState],
+  (roles) => roles.updateError
 );
 
 export default rolesSlice.reducer;

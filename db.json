@@ -53,25 +53,30 @@
       }
     },
     {
-      "id": "4fb620f0-3e55-4b8a-9e6b-2265920357b6",
       "name": "Doctor",
       "permissions": {
         "8b0ae46a-e3f3-4381-92a4-4eda6e64d988": [
           "5b1b4f94-988d-4a7f-9eb7-b8478c3483d4",
           "a4ff6d30-1f56-4a96-96f1-6f9b84c505e2",
           "c6e031c2-53d1-4f64-8b5a-32e7c4c60101"
+        ],
+        "a85d30ad-d4f5-4a01-9f07-b0d0ac29a831": [
+          "5b1b4f94-988d-4a7f-9eb7-b8478c3483d4",
+          "a4ff6d30-1f56-4a96-96f1-6f9b84c505e2"
         ]
-      }
+      },
+      "id": "4fb620f0-3e55-4b8a-9e6b-2265920357b6"
     },
     {
-      "id": "c5dd6a1a-db56-4fac-90dd-f562a1fb58fc",
       "name": "Patient",
       "permissions": {
         "8b0ae46a-e3f3-4381-92a4-4eda6e64d988": [
           "5b1b4f94-988d-4a7f-9eb7-b8478c3483d4",
           "a4ff6d30-1f56-4a96-96f1-6f9b84c505e2"
-        ]
-      }
+        ],
+        "a85d30ad-d4f5-4a01-9f07-b0d0ac29a831": []
+      },
+      "id": "c5dd6a1a-db56-4fac-90dd-f562a1fb58fc"
     }
   ],
   "users": [

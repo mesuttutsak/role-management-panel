@@ -7,7 +7,7 @@
 }
 
 .buttonPositive:hover:not(:disabled) {
-  @apply bg-primary-700 -translate-y-px shadow-button;
+  @apply -translate-y-px shadow-button;
 }
 
 .buttonPositive:disabled {

@@ -7,7 +7,7 @@ export function Spinner({ fullPage = false, message = "Loading..." }) {
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
-        minHeight: fullPage ? "100vh" : "auto",
+        minHeight: fullPage ? "100%" : "auto",
         padding: "2rem",
       }}
     >
