@@ -1,46 +1,75 @@
-# Getting Started with Create React App
+# Role Management Panel
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React 19, Redux Toolkit, Tailwind CSS ve Headless UI üzerinde kurulu; kullanıcıları paginated tabloda listeler, CRUD akışlarını destekler ve json-server üzerinden gelen rol-izin bilgilerini yönetir.
 
-## Available Scripts
+## 1. Proje Özeti
+- **Senaryo**: Yöneticiler güvenli bir dashboard üzerinden Admin/Doctor/Patient rollerini ve izinlerini yönetir, kullanıcı CRUD + filtreleme yapar (`/dashbord`).
+- **Teknoloji**: React 19 + React Router, Redux Toolkit, Tailwind CSS + CSS Modules, Headless UI, TanStack Table, json-server.
+- **Kapsam**: Kullanıcı CRUD ve filtreleme, rol izin editörü, izin farkındalıklı oturum yönetimi.
 
-In the project directory, you can run:
+## 2. Kurulum & Çalıştırma
+```bash
+npm install          # bağımlılıkları yükle
+npm run mock:server  # backend'i (json-server) http://localhost:3001 üzerinde başlat
+npm run start        # frontend'i(react) dev sunucusunu http://localhost:3000'da çalıştır
+```
+- Varsayılan giriş: `admin / 1234` (systemUser).
+- Prod build: `npm run build`.
+- Config: `src/config/index.js` içinde `API_BASE_URL` ve oturum anahtarı tanımlı.
 
-### `npm start`
+## 3. Mimari
+### 3.1 Klasör yapısı
+```
+src/
+  app/            # redux store + hook'lar
+  core/           # tekrar kullanılabilir UI + layout + util
+  features/       # domain slice'ları (auth, users, roles, ...)
+  pages/          # route seviyesindeki görünümler (login, dashboard/*)
+  routes/         # router tanımları
+  config/         # sabitler ve env alınan değerler
+```
+- **Component/Hook isimleri**: React component'leri PascalCase (`UsersPage`), hook/util'ler camelCase (`useRolePermissions`).
+- **Stil**: CSS Module + Tailwind `@apply`; her component yanına `.module.css`.
+- **Import**: `core/ui/*/index.js` içinde barrel export. `alias` kullanımını bilerek dahil etmedim proje üzerinde yeni dahil edilen modüller ve teknolojilerde ekstra geliştrme ihtiyacından kaynaklı birden aksamalar meydana getiriyor. 1'den fazla kişiden oluşan ekiplerde hız kaybına sebebiyet veriyor.
+- **Commit**: Kısa prefix'ler (`feat:`, `refactor:`) ve küçük parçalar halinde commit. bknz: `<statu>: message`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 3.2 State yönetimi
+- Redux Toolkit slice bazlı mimari (`features/users/usersSlice.js`).
+- Async thunk + selector'lar API/paginasyon akışını yönetir.
+- `useUsersTable`, `useRolePermissions` gibi hook'lar slice + UI arasındaki case'leri yönetir.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 3.3 UI sistemi
+- Layout'lar: `AuthLayout` ve `DashboardLayout`.
+- `core/ui` altında common componentler ve Headless UI sarıcıları (Button, Input, Modal, PaginatedTable...).
+- Tailwind config özel renk + tipografi seti içerir.
 
-### `npm test`
+### 3.4 Route mimarisi
+- Tüm route tanımları `src/routes/routeList.js` içinde; lazy-loaded component + permission tanımları tek noktadan yönetiliyor.
+- `RequireAuth` ve `SessionRedirect` guard bileşenleri login akışını kontrol ediyor.
+- `/dashbord` altında `DashboardShell` layout'u render alıp `Outlet` aracılığıyla alt sayfaları besliyor.
+- Users sayfası `src/pages/dashboard/users/UsersPage.jsx`, create/edit modalları aynı klasördeki route bileşenleri (`UsersCreateRoute`, `UsersEditRoute`) üzerinden URL tabanlı açılıyor.
+- Roles, Overview gibi diğer sayfalar da `pages/dashboard/*` altında yer alıyor; Headless UI layout bileşenleri üzerinden aynı shell'e oturuyorlar.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 3.5 Auth + Session mekanizması
+- `features/auth/authSlice.js` login thunk'u json-server `/auth/login` endpoint'ine POST atıyor; gelen kullanıcı bilgisi ve permissionGroups state'e yazılıyor.
+- Başarılı login'de kullanıcı `core/utils/session` içindeki localStorage tabanlı session manager ile `loggedUser` key ile  tutuluyor; süre `config/index.js` üzerinden belirlenen 30 dk.
+- Sayfa yenilemelerinde `storedUser` state'e preload ediliyor. Logout tüm session state'ini temizliyor.
+- Route guard'lar (`RequireAuth`, `SessionRedirect`) `auth.user` state'ini okuyup login'e yönlendiriyor veya dashboard'a taşıyor.
+- Menü ve sayfa erişimleri `useHasPermission` hook'u ile kullanıcıdaki permissionGroups'a göre dinamik olarak kısıtlanıyor.
 
-### `npm run build`
+### 3.6 Paginated stratejisi
+- `useUsersTable` sayfa değişiminde iki fetch'i paralel koşturuyor:
+  1. `fetchUsers` → seçili sayfanın kayıtları dönüyor. Ve bir sonraki sayfa değer olduğunu `hasMore` parametresi ile boolean dönüyor. Böylece Count isteği tamamlanmadan prev/next yapabiliyoruz.
+  2. `fetchUsersTotalCount` → sadece filter'ı baz alarak (hiç olmayadabilir) sadece toplam kayıt sayısını dönüyor. 
+- İki isteği `Promise.all` ile tetikleyerek büyük listelerde `count` hesaplamasının tek isteği yavaşlatmasının önüne geçiliyor.
+- json-server da `_page`/`_limit` parametreleri json-server'a uyumlu şekilde istek atılmıştır. 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 4. Geliştirilebilecekler
+- Rol editöründe toplu rol oluşturma.
+- alert'ler yerine dialog component eklenemesi.
+- Proje core'un Redux state management kullanacak generic notification yazılmaıs
+- PaginatedTable'ın List sayfalarını yönetmek için yazılmış generic bir hook fetch metodu ve use case'lerini kendi içinde gerçekleştirebilmesi. Prop drilling ile veri yönetime zorunluluğu oratadan kaldırır.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 5. Efor & İletişim
+- Yaklaşık **22 saat** (backend(json-server) + frontend(react) düzenlemeleri dahil).
+- Mesut Tutsak — `ttsk.mesut@gmail.com` - `+90 0536 563 31 46`.
